@@ -31,6 +31,14 @@
       )
         FacebookIcon.icon
 
+    .github
+      a(
+        href="https://github.com/bounce-inc/lockr"
+        target="_blank"
+        rel="noopener"
+      )
+        GitHubIcon.icon
+
     .privacy
       router-link(to="/privacy") {{ i18n.t('app_privacy_policy') }}
 
@@ -59,13 +67,21 @@
 import CookieNotice from './components/CookieNotice'
 import ErrorModal from './components/ErrorModal'
 import FacebookIcon from 'vue-material-design-icons/FacebookBox'
+import GitHubIcon from 'vue-material-design-icons/GithubCircle'
 import LockIcon from 'vue-material-design-icons/Lock'
 import TwitterIcon from 'vue-material-design-icons/Twitter'
 import i18n from './i18n'
 import { error_status } from './error'
 
 export default
-  components: { LockIcon, CookieNotice, ErrorModal, TwitterIcon, FacebookIcon }
+  components: {
+    LockIcon
+    CookieNotice
+    ErrorModal
+    GitHubIcon
+    TwitterIcon
+    FacebookIcon
+  }
   data: ->
     has_mouse: true
     capable: window.Worker and window.WebSocket
@@ -139,8 +155,8 @@ a
     display flex
     justify-content space-between
     align-items center
-    .share .icon
-      font-size 1.6rem
+    .icon
+      font-size 2rem
       margin-right 0.4rem
     .copyright .copy
       font-family Helvetica, Arial, san-serif
