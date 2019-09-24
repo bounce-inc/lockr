@@ -10,7 +10,10 @@ You no longer need to encrypt your file before sending it.
 Also features automatic expiration, download count limit,
 and password protection.
 
-This repository contains source code of the above website, though frontend only.
+This repository contains the source code of the above website,
+though frontend only.
+
+This is the **real** repository where the `master` branch is deployed on the production servers.
 
 ## Japanese
 
@@ -20,8 +23,11 @@ Lockrはエンドtoエンド暗号化(E2EE)と二重の256ビット暗号化を�
 
 このレポジトリは上記サイトのソースコードです (フロントエンドのみ)。
 
+これは `master` ブランチが本番サーバーにデプロイされている **実際の** レポジトリです。
+
+
 ## License
 
-TBD
+**TBD**
 
 Copyright 2019 Bounce Inc. All rights reserved.
