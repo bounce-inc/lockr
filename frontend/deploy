@@ -1,0 +1,41 @@
+#!/bin/bash -e
+
+cd $(dirname $0)
+
+git fetch
+git reset --hard origin/master
+
+rm -rf build.old
+if [ -d build ]; then
+    mv build build.old
+fi
+
+yarn
+yarn build --dest build
+yarn i18n build
+gzip -k -9 $(find build -type f | egrep '\.(html|js|css|ico)$')
+
+NEWDIST=dist.$(date +%Y%m%d-%H%M%S)
+
+echo "Making $NEWDIST with new assets"
+mkdir $NEWDIST
+if [ -d build.old ]; then
+    cp -a build.old/. $NEWDIST
+fi
+rsync -a --exclude='*.html' --exclude='*.html.gz' build/. $NEWDIST
+echo $(git rev-parse --short HEAD)-nohtml > $NEWDIST/.rev
+
+echo "Switching dist to $NEWDIST"
+old=$(readlink dist)
+ln -sfT $NEWDIST dist
+
+echo "Removing $old"
+rm -rf $old
+
+echo "Waiting for new assets to sync"
+sleep 60
+
+echo "Copying new HTMLs to $NEWDIST"
+rsync -a build/. $NEWDIST
+git rev-parse --short HEAD > $NEWDIST/.rev
+echo "Done, but wait another minute for the new HTMLs to sync"

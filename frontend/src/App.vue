@@ -1,0 +1,158 @@
+<template lang="pug">
+#app(
+  :class="{ 'has-mouse': has_mouse, 'notice-shown': notice_shown }"
+  @touchstart="has_mouse = false"
+)
+  header
+    h1
+      router-link(to="/")
+        LockIcon
+        | Lockr
+        sub.beta BETA 
+    .catch {{ i18n.t('app_catch') }}
+
+  p(v-if="!capable") {{ i18n.t('app_old_browser_warn') }}
+  p(v-else-if="error_status.maintenance") {{ i18n.t('app_maintenance') }}
+  router-view(v-else)
+  .filler
+  footer
+    .share {{ i18n.t('app_share') }} 
+      a(
+        :href="`https://twitter.com/share?url=${share_url}`"
+        target="_blank"
+        rel="noopener"
+      )
+        TwitterIcon.icon
+      | 
+      a(
+        :href="`https://www.facebook.com/sharer/sharer.php?u=${share_url}`"
+        target="_blank"
+        rel="noopener"
+      )
+        FacebookIcon.icon
+
+    .privacy
+      router-link(to="/privacy") {{ i18n.t('app_privacy_policy') }}
+
+    .lang
+      a(
+        href="/ja/"
+        v-if="i18n.lang === 'en'"
+        @click.prevent="i18n.set_lang('ja')"
+      ) 日本語
+      a(
+        href="/en/"
+        v-if="i18n.lang === 'ja'"
+        @click.prevent="i18n.set_lang('en')"
+      ) English
+
+    .copyright
+      span.copy &copy; 
+      | {{ year }} 
+      a(href="https://www.bounce-inc.jp/" target="_blank" rel="noopener")
+        | {{ i18n.t('app_copyright') }}
+  CookieNotice(@show="notice_shown = true" @hide="notice_shown = false")
+  ErrorModal
+</template>
+
+<script lang="coffee">
+import CookieNotice from './components/CookieNotice'
+import ErrorModal from './components/ErrorModal'
+import FacebookIcon from 'vue-material-design-icons/FacebookBox'
+import LockIcon from 'vue-material-design-icons/Lock'
+import TwitterIcon from 'vue-material-design-icons/Twitter'
+import i18n from './i18n'
+import { error_status } from './error'
+
+export default
+  components: { LockIcon, CookieNotice, ErrorModal, TwitterIcon, FacebookIcon }
+  data: ->
+    has_mouse: true
+    capable: window.Worker and window.WebSocket
+    i18n: i18n
+    error_status: error_status
+    notice_shown: false
+  computed:
+    year: -> new Date().getFullYear()
+    share_url: -> encodeURIComponent "https://lockr.jp/#{@i18n.lang}/"
+</script>
+
+<style lang="stylus">
+html
+  font-size 62.5% // 1rem == 10px for default setting (16px) of most browsers
+  font-family 'Trebuchet MS', Helvetica, Arial, sans-serif
+  background #333
+  color #eee
+  line-height 1.5
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+  font-feature-settings "palt"
+  overflow-wrap break-word
+  -webkit-overflow-scrolling touch
+  &[lang="ja"]
+    font-family 'Hiragino Kaku Gothic Pro', 'Yu Gothic Medium', Meiryo,
+      sans-serif
+  height 100%
+
+body
+  font-size 1.6rem // 16px
+  height 100%
+
+a
+  color inherit
+
+#app
+  min-height 100%
+  display flex
+  flex-direction column
+  justify-content space-between
+
+  max-width 80rem
+  padding 0.8rem
+  margin 0 auto
+
+  transition padding-bottom 1s cubic-bezier(.7, 0, .3, 1)
+  &.notice-shown
+    padding-bottom 6.4rem
+
+  header
+    margin 1.6rem 0
+    h1
+      display inline-block
+      font-family 'Helvetica Neue', Helvetica, Arial, sans-serif
+      a
+        text-decoration none
+      .beta
+        opacity 0.5
+        font-size 1.6rem
+    .catch
+      display inline-block
+      margin-left 0.8rem
+
+  .filler
+    flex-grow 1
+
+  footer
+    opacity 0.7
+    font-size 1.4rem
+    margin 3.2rem 0 0.8rem
+    display flex
+    justify-content space-between
+    align-items center
+    .share .icon
+      font-size 1.6rem
+      margin-right 0.4rem
+    .copyright .copy
+      font-family Helvetica, Arial, san-serif
+    a
+      text-decoration none
+    .lang
+      cursor pointer
+      white-space nowrap
+</style>
+
+<!-- without scope -->
+<style lang="stylus">
+.error .title .icon svg
+  bottom 0
+</style>

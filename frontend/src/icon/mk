@@ -1,0 +1,4 @@
+#!/bin/sh
+svg2png -w 256 -h 256 favicon.svg favicon.png
+convert -background transparent -define icon:auto-resize=256,128,64,32,16 -colors 256 favicon.png ../../public/favicon.ico
+svg2png -w 1200 -h 630 favicon.svg ../../public/share.png
