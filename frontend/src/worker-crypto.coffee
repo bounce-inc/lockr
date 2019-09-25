@@ -1,4 +1,4 @@
-import CryptoWorker from 'worker-loader!./crypto-worker'
+import CryptoWorker from 'worker-loader?name=js/worker.[hash:8].js!./crypto-worker'
 
 export default ->
   worker = new CryptoWorker
