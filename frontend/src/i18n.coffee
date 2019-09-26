@@ -148,7 +148,7 @@ translations =
     app_privacy_policy: 'プライバシーポリシー'
 
     cookie_notice: 'このサイトはCookieを使用しています。詳しくは' +
-      '<a href="/privacy">プライバシーポリシー</a> をご覧ください。'
+      '<a href="/privacy">プライバシーポリシー</a>をご覧ください。'
 
     home_drop_or_choose:
       'ファイルを選択するかドラッグ&ドロップしてアップロードを開始します。'
