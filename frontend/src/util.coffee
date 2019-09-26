@@ -7,9 +7,10 @@ export is_file_readable = (file) ->
 
 export sleep = (msec) -> new Promise (resolve) -> setTimeout resolve, msec
 
-ua = navigator.userAgent
-is_safari = /Safari/.test(ua) and not /Chrome/.test(ua)
-is_edge = /Edge/.test(ua)
-
-export has_service_worker = navigator.serviceWorker and
-  not (is_safari or is_edge)
+export has_service_worker = do ->
+  ua = navigator.userAgent
+  m = /Chrome\/(\d+)/.exec(ua)
+  chrome = if m then m[1] | 0 else 0
+  m = /Firefox\/(\d+)/.exec(ua)
+  firefox = if m then m[1] | 0 else 0
+  navigator.serviceWorker and (chrome >= 76 or firefox >= 68)
