@@ -50,4 +50,8 @@ export default
 
 .v-enter, .v-leave-to
   transform translateY(100%)
+
+@media (max-width: 480px)
+  .notice p
+    font-size 1.2rem
 </style>
