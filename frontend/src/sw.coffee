@@ -1,10 +1,5 @@
 import Crypto from './crypto'
-import { join_bytes, b64encode } from './encode'
-import { ws_url } from './util'
-import Hmac from './hmac'
-import PromisedWebSocket from './ws-promise'
 import Decrypter from './decrypter'
-import api from './api'
 
 downloads = {}
 last_id = 0
