@@ -13,7 +13,18 @@ and password protection.
 This repository contains the source code of the above website,
 though frontend only.
 
-This is the **real** repository where the `master` branch is deployed on the production servers.
+This is the **real** repository where the `master` branch is deployed on the production.
+You can verify that by building it yourself and comparing the result.
+(Though hashes in the filenames are built different for some reason I don't know.)
+
+This repository is open for people to understand and verify how Lockr provides security.
+
+### License
+
+Copyright 2019 Bounce Inc. All rights reserved.
+
+You may use this source code for verification, experimentation, study and research purpose.
+ 
 
 ## Japanese
 
@@ -24,10 +35,13 @@ Lockrはエンドtoエンド暗号化(E2EE)と二重の256ビット暗号化を�
 このレポジトリは上記サイトのソースコードです (フロントエンドのみ)。
 
 これは `master` ブランチが本番サーバーにデプロイされている **実際の** レポジトリです。
+あなた自身でビルドして比較することでご確認いただけます。
+(なぜかファイル名のハッシュは違ってしまいますが。)
 
+このリポジトリは、Lockrがどのようにセキュリティを実現しているかを理解し検証していただく目的で公開しています。
 
-## License
+### ライセンス
 
-**TBD**
+このソースコードはBOUNCE株式会社の著作物です。
 
-Copyright 2019 Bounce Inc. All rights reserved.
+あなたは検証、実験、学習、および研究の目的でこのソースコードを使用することができます。
