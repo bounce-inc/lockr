@@ -81,4 +81,10 @@ footer
   .lang
     cursor pointer
     white-space nowrap
+
+@media (max-width: 480px)
+  footer
+    flex-direction column
+    & > *
+      margin-bottom .8rem
 </style>
