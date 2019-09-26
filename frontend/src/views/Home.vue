@@ -2,7 +2,7 @@
 .container
   ActiveBox.active-box
     .chooser-box
-      .instruction {{ t('home_drop_or_choose') }}
+      .instruction {{ t(instruction) }}
       FileChooser(v-slot="{ open }" @file-chosen="file_chosen")
         Button(primary @click="open")
           FolderIcon
@@ -20,6 +20,7 @@ import FolderIcon from 'vue-material-design-icons/Folder'
 import api from '../api'
 import i18n, { t } from '../i18n'
 import { show_error } from '../error'
+import { is_mobile } from '../util'
 
 export default
   components: {
@@ -32,6 +33,7 @@ export default
 
   computed:
     lang: -> i18n.lang
+    instruction: -> if is_mobile then 'home_choose' else 'home_drop_or_choose'
 
   methods:
     t: t
@@ -66,4 +68,10 @@ export default
   align-items center
   .instruction
     flex-grow 1
+
+@media (max-width: 480px)
+  .chooser-box
+    flex-direction column
+    .instruction
+      margin-bottom .8rem
 </style>

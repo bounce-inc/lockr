@@ -38,6 +38,7 @@ translations =
       <a href="/privacy">Privacy Policy</a>.'''
 
     home_drop_or_choose: 'Drop here or choose a file to start uploading.'
+    home_choose: 'Choose a file to start uploading.'
     home_btn_choose_file: 'Choose File'
 
     file_chooser_drop_it: 'Drop it to upload'
@@ -151,6 +152,7 @@ translations =
 
     home_drop_or_choose:
       'ファイルを選択するかドラッグ&ドロップしてアップロードを開始します。'
+    home_choose: 'ファイルを選択してアップロードを開始します。'
     home_btn_choose_file: 'ファイルを選択'
 
     file_chooser_drop_it: 'ドロップしてアップロード'

@@ -14,3 +14,5 @@ export has_service_worker = do ->
   m = /Firefox\/(\d+)/.exec(ua)
   firefox = if m then m[1] | 0 else 0
   navigator.serviceWorker and (chrome >= 76 or firefox >= 68)
+
+export is_mobile = /iPhone|iPad|iPod|Android/.test navigator.userAgent
