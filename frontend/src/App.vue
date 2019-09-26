@@ -25,8 +25,9 @@ import CookieNotice from './components/CookieNotice'
 import ErrorModal from './components/ErrorModal'
 import Footer from './components/Footer'
 import LockIcon from 'vue-material-design-icons/Lock'
+import api from './api'
 import i18n from './i18n'
-import { error_status } from './error'
+import { error_status, show_error } from './error'
 
 export default
   components: {
@@ -41,6 +42,11 @@ export default
     i18n: i18n
     error_status: error_status
     notice_shown: false
+  created: ->
+    try
+      await api 'GET', '/status'
+    catch e
+      show_error e
 </script>
 
 <style lang="stylus">
