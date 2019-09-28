@@ -3,7 +3,7 @@
 cd $(dirname $0)
 
 git fetch
-git reset --hard origin/master
+git reset --hard origin/${1:-master}
 
 rm -rf build.old
 if [ -d build ]; then
