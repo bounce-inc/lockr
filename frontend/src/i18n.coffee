@@ -35,7 +35,7 @@ translations =
 
     cookie_notice: '''
       This website uses Cookies. For details, read our
-      <a href="/privacy">Privacy Policy</a>.'''
+      <a href="/privacy" target="_blank">Privacy Policy</a>.'''
 
     home_drop_or_choose: 'Drop here or choose a file to start uploading.'
     home_choose: 'Choose a file to start uploading.'
@@ -148,7 +148,8 @@ translations =
     app_privacy_policy: 'プライバシーポリシー'
 
     cookie_notice: 'このサイトはCookieを使用しています。詳しくは' +
-      '<a href="/privacy">プライバシーポリシー</a>をご覧ください。'
+      '<a href="/privacy" target="_blank">プライバシーポリシー</a>' +
+      'をご覧ください。'
 
     home_drop_or_choose:
       'ファイルを選択するかドラッグ&ドロップしてアップロードを開始します。'

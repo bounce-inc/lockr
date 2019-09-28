@@ -42,6 +42,9 @@ export default
   background: #222
   height 6.4rem
   padding 0.8rem
+  p
+    font-size 1.4rem
+    opacity 0.7
   .button
     margin-left 1.6rem
 
