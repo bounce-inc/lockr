@@ -15,12 +15,17 @@ export default
   components: { Button, NotificationIcon }
   data: ->
     show:
-      window.Notification?.permission == 'default' and
-      not /Android/.test navigator.userAgent
+      window.Notification?.permission == 'default' and @supported()
   methods:
     t: t
     enable: ->
       Notification.requestPermission => @show = false
+    supported: ->
+      try
+        new Notification ''
+        true
+      catch
+        false
 </script>
 
 <style scoped lang="stylus">
