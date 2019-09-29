@@ -11,7 +11,7 @@ export human_readable_size = (size) ->
     size /= 1 << 10
     unit = 'K'
   else
-    unit = ' '
+    unit = ''
 
   if size < 10
     size = Math.round(size * 100) / 100
@@ -20,20 +20,10 @@ export human_readable_size = (size) ->
   else
     size = Math.round(size)
 
-  "#{size}#{unit}#{i18n.t('util_bytes')}"
-
-export locale_date_time = (d) ->
-  zerofill = (x) -> ('0' + x).slice -2
-  if i18n.lang == 'ja'
-    Y = d.getFullYear()
-    M = d.getMonth() + 1
-    D = d.getDate()
-    h = zerofill d.getHours()
-    m = zerofill d.getMinutes()
-    s = zerofill d.getSeconds()
-    "#{Y}/#{M}/#{D} #{h}:#{m}:#{s}"
+  if unit == ''
+    i18n.t 'util_bytes', size: size
   else
-    d.toLocaleString()
+    "#{size}#{unit}B"
 
 export human_readable_time = (t) ->
   MINUTE = 60

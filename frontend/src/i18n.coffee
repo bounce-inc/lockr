@@ -43,7 +43,7 @@ translations =
 
     file_chooser_drop_it: 'Drop it to upload'
 
-    util_bytes: 'Bytes'
+    util_bytes: '#{size|byte|bytes}'
 
     test_start: 'Start Testing'
     test_testing: 'Testing...'
@@ -158,7 +158,7 @@ translations =
 
     file_chooser_drop_it: 'ドロップしてアップロード'
 
-    util_bytes: 'バイト'
+    util_bytes: '#{size}バイト'
 
     test_start: 'テスト開始'
     test_testing: 'テスト中...'
