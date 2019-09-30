@@ -6,10 +6,13 @@ import { has_service_worker } from './util'
 import App from './App'
 import router from './router'
 import ga from './ga'
+import Vue2TouchEvents from 'vue2-touch-events'
 
 service_worker() if has_service_worker
 
 router.afterEach -> Vue.nextTick ga
+
+Vue.use Vue2TouchEvents
 
 new Vue
   router: router

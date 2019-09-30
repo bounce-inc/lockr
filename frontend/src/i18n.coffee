@@ -55,6 +55,7 @@ translations =
     fileinfo_size: 'Size'
     fileinfo_last_modified: 'Last Modified'
 
+    upload_add_file: 'Add Files'
     upload_uploading: 'Encrypting and uploading...'
     upload_max_dl: 'Maximum downloads'
     upload_period: 'Available for'
@@ -171,6 +172,7 @@ translations =
     fileinfo_size: 'サイズ'
     fileinfo_last_modified: '最終更新'
 
+    upload_add_file: 'ファイルを追加'
     upload_uploading: '暗号化してアップロードしています...'
     upload_max_dl: '最大ダウンロード回数'
     upload_period: '有効期限'

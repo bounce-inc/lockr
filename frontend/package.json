@@ -21,6 +21,7 @@
     "vue-global-events": "^1.1.2",
     "vue-material-design-icons": "^3.4.0",
     "vue-router": "^3.0.3",
+    "vue2-touch-events": "^2.0.0",
     "webcrypto-shim": "^0.1.4",
     "whatwg-fetch": "^3.0.0"
   },

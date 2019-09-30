@@ -1,12 +1,26 @@
 <template lang="pug">
 .container
-  FileInfo(v-for="file, i in files" :file="file" :key="i")
+  TransitionGroup(tag="div")
+    FileInfo.file-info(
+      v-for="file in files"
+      :key="file.name"
+      :file="file"
+      removable
+      @remove="remove_file(file)"
+    )
+  .add-file(v-if="status !== 'file'")
+    FileChooser(v-slot="{ open }" @file-chosen="add_file")
+      Button(@click="open")
+        FolderIcon
+        | 
+        | {{ t('upload_add_file') }}
   UploadInfo(v-if="upload_info" :info="upload_info")
 
+
   ActiveBox.active-box
-    .chooser-box(v-show="status == 'file'")
-      .instruction {{ t('home_drop_or_choose') }}
-      FileChooser(v-slot="{ open }" @file-chosen="file_chosen")
+    .chooser-box(v-if="status == 'file'")
+      .instruction {{ t(instruction) }}
+      FileChooser(v-slot="{ open }" @file-chosen="add_file")
         Button(primary @click="open")
           FolderIcon
           | 
@@ -50,11 +64,12 @@ import Upload from '../upload'
 import UploadForm from '../components/UploadForm'
 import UploadInfo from '../components/UploadInfo'
 import api from '../api'
-import secrets from '../secrets'
-import { t } from '../i18n'
-import { show_error } from '../error'
-import { human_readable_size } from '../ui-util'
 import notification from '../notification'
+import secrets from '../secrets'
+import { human_readable_size } from '../ui-util'
+import { is_mobile } from '../util'
+import { show_error } from '../error'
+import { t } from '../i18n'
 
 export default
   components: {
@@ -90,21 +105,30 @@ export default
       usage: human_readable_size @upload_spec.usage
 
   mounted: ->
-    if @f then @file_chosen @f
+    if @f then @add_file @f
 
   methods:
     t: t
 
     init: ->
-      @files = @upload_info = null
+      @files = []
+      @upload_info = null
       @status = 'file'
       @progress = 0
 
-    file_chosen: (files) ->
-      @files = files
+    add_file: (files) ->
+      for file in files
+        found = false
+        for f in @files
+          if file.name == f.name
+            found = true
+            break
+        unless found
+          @files.push file
       try
-        @status = 'query'
-        @upload_spec = await api 'GET', '/uploads/info'
+        unless @upload_spec
+          @status = 'query'
+          @upload_spec = await api 'GET', '/uploads/info'
         if @check_quota()
           @status = 'form'
         else
@@ -114,11 +138,16 @@ export default
         show_error e
         @init()
 
+    remove_file: (file) ->
+      i = @files.indexOf file
+      @files.splice i, 1
+      if @files.length == 0
+        @status = 'file'
+
     check_quota: ->
       remain = @upload_spec.quota - @upload_spec.usage
       size = 0
-      for file in @files
-        size += file.size
+      size += file.size for file in @files
       size < remain
 
     submit: (data) ->
@@ -148,9 +177,15 @@ export default
       @upload?.cancel()
       @upload_info = null
       @status = 'form'
+
+  computed:
+    instruction: -> if is_mobile then 'home_choose' else 'home_drop_or_choose'
 </script>
 
 <style scoped lang="stylus">
+.add-file
+  text-align right
+  margin-top 0.8rem
 .active-box
   margin 1.6rem 0
 .chooser-box
@@ -160,4 +195,8 @@ export default
   align-items center
   .instruction
     flex-grow 1
+.v-move
+  transition transform .2s
+.v-leave-active
+  display none
 </style>
