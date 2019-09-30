@@ -1,6 +1,7 @@
 <template lang="pug">
 .container
   FileInfo.fileinfo(v-if="file_info" :file="file_info")
+  FileList(v-if="file_info && file_info.manifest" :files="file_info.manifest")
 
   .error-frame(v-if="large_file") {{ t('download_large_file_warn') }}
 
@@ -41,6 +42,10 @@
 
   .completed(v-if="status == 'completed'") {{ t('download_completed') }}
   .canceled(v-if="status == 'canceled'") {{ t('download_canceled') }}
+  .win-warn(v-if="win_warn")
+    ErrorIcon
+    span &nbsp;
+    span(v-html="t('download_win_warn')")
 
   NotificationRequest(v-if="status == 'download'")
 
@@ -57,6 +62,7 @@ import Download from '../download'
 import DownloadIcon from 'vue-material-design-icons/CloudDownload'
 import ErrorIcon from 'vue-material-design-icons/AlertCircle'
 import FileInfo from '../components/FileInfo'
+import FileList from '../components/FileList'
 import GlobalEvents from 'vue-global-events'
 import NotificationRequest from '../components/NotificationRequest'
 import ProgressBar from '../components/ProgressBar'
@@ -74,6 +80,7 @@ export default
     DownloadIcon
     ErrorIcon
     FileInfo
+    FileList
     GlobalEvents
     NotificationRequest
     ProgressBar
@@ -93,6 +100,16 @@ export default
   computed:
     large_file: ->
       @file_info?.size > 1024 * 1024 * 1024 and not has_service_worker
+    win_warn: ->
+      m = /NT ([\d.]+)/.exec navigator.userAgent
+      return false unless m
+      win_ver = m[1] + 0
+      return false if win_ver > 6.1
+      return false unless @file_info?.manifest
+      for file in @file_info.manifest
+        if /[^\x20-\x7f]/.test file.name
+          return true
+      false
 
   mounted: ->
     @start()
@@ -186,6 +203,10 @@ form
   border 0.2rem solid #ccc
   border-radius 0.8rem
   padding 2rem
+  text-align center
+
+.win-warn
+  margin 2rem 0
   text-align center
 
 .learn

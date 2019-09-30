@@ -55,6 +55,7 @@ export default class Download
     size: @meta.size
     type: @meta.type
     lastModified: @meta.last_modified
+    manifest: @meta.manifest
 
 class BlobDecrypter extends Decrypter
   constructor: (params) ->

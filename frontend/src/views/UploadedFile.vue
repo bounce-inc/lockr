@@ -6,6 +6,7 @@
       QuestionIcon
       | {{ t('uploadedfile_noinfo_title') }}
     .desc {{ t('uploadedfile_noinfo_desc') }}
+  FileList(v-if="meta && meta.manifest" :files="meta.manifest")
 
   .status(v-if="info")
     span(v-if="info.status != 'deleted'")
@@ -39,7 +40,6 @@
         span(v-else) {{ t('uploadedfile_copy') }}
 
   .info(v-if="info")
-    div(v-if="remaining_time") {{ t('app_progress', { time: remaining_time}) }}
     .counts
       span(:title="t('uploadedfile_dl_progress')")
         ProgressIcon.icon(:title="t('uploadedfile_dl_progress')")
@@ -52,6 +52,8 @@
         | {{ info.dl_success }} 
       span(:title="t('uploadedfile_dl_max')")
         | / {{ info.max_downloads }}
+      span.remaining(v-if="remaining_time")
+        | {{ t('app_progress', { time: remaining_time}) }}
 
   .upload-more
     router-link(:to="{ name: 'upload' }") {{ t('uploadedfile_more') }}
@@ -67,6 +69,7 @@ import Crypto from '../crypto'
 import DeleteIcon from 'vue-material-design-icons/Delete'
 import FailIcon from 'vue-material-design-icons/CloseCircleOutline'
 import FileInfo from '../components/FileInfo'
+import FileList from '../components/FileList'
 import LinkIcon from 'vue-material-design-icons/Link'
 import ProgressIcon from 'vue-material-design-icons/ProgressDownload'
 import QuestionIcon from 'vue-material-design-icons/FileQuestion'
@@ -88,6 +91,7 @@ export default
     DeleteIcon
     FailIcon
     FileInfo
+    FileList
     LinkIcon
     ProgressIcon
     QuestionIcon
@@ -192,4 +196,6 @@ export default
   .icon
     font-size 2.4rem
     vertical-align -0.3rem
+  .remaining
+    margin-left 1.6rem
 </style>

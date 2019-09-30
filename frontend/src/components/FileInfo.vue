@@ -12,7 +12,7 @@
       :class="{ expose: expose_remove }"
     )
       CancelIcon(title="Delete")
-  .filename
+  .filename(:class="{ bold: bold }")
     FileIcon
     | {{ file.name }} 
 </template>
@@ -32,6 +32,9 @@ export default
     removable:
       type: Boolean
       default: false
+    bold:
+      type: Boolean
+      default: true
   data: ->
     t: i18n.t.bind i18n
     expose_remove: false
@@ -43,10 +46,10 @@ export default
 </script>
 
 <style scoped lang="stylus">
-.filename
+.filename.bold
+  font-weight bold
   font-size 2.0rem
   line-height 3.0rem
-  font-weight bold
 .info
   float right
   .item

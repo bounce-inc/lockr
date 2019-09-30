@@ -87,6 +87,9 @@ translations =
       'Are you sure to delete this file from the server?'
     uploadedfile_more: 'Upload another file'
 
+    filelist_more: '#{count|more file|more files}'
+    filelist_less: 'Show less'
+
     download_password: 'Password'
     download_wrong_password: 'Wrong password.'
     download_btn_download: 'Download'
@@ -100,6 +103,9 @@ translations =
       Your browser may not be able to download files of this size.
       If the download stops or the device slows down, download it with
       another browser. '''
+    download_win_warn: '''If some of the file names are garbled, use
+      <a href="https://www.7-zip.org/" target="_blank" rel="noopener">7-Zip</a>
+      or other unarchivers.'''
 
     notification_description:
       'You can receive a desktop notification when the transfer completes.'
@@ -200,6 +206,9 @@ translations =
     uploadedfile_confirm_delete: 'ファイルをサーバーから削除してよろしいですか?'
     uploadedfile_more: '他のファイルをアップロードする'
 
+    filelist_more: '他#{count}ファイル'
+    filelist_less: '少なく表示'
+
     download_password: 'パスワード'
     download_btn_download: 'ダウンロード'
     download_wrong_password: 'パスワードが違います'
@@ -213,6 +222,10 @@ translations =
       'ダウンロードできない可能性があります。もしダウンロードが止まったり' +
       'デバイスの動作が遅くなった場合は、別のブラウザでダウンロードして' +
       'ください。'
+    download_win_warn: 'ファイル名が文字化けする場合は ' +
+      '<a href="https://forest.watch.impress.co.jp/library/software/7zip/"' +
+      ' target="_blank" rel="noopener">7-Zip</a> ' +
+      '等をお使いください。'
 
     notification_description:
       '転送完了時にデスクトップ通知を受け取ることができます。'
