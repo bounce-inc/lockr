@@ -15,11 +15,9 @@ class Queue
     throw @err if @err
     @writer() if @writer
     data = @queue.shift()
-    console.log 'read', data.length, @queue.length
     data
 
   write: (data) ->
-    console.log 'write', data.length, @queue.length
     if @queue.length >= @max
       await new Promise (resolve) => @writer = resolve
       @writer = null
