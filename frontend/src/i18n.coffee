@@ -37,11 +37,12 @@ translations =
       This website uses Cookies. For details, read our
       <a href="/privacy" target="_blank">Privacy Policy</a>.'''
 
-    home_drop_or_choose: 'Drop here or choose a file to start uploading.'
-    home_choose: 'Choose a file to start uploading.'
-    home_btn_choose_file: 'Choose File'
+    home_drop_or_choose: 'Drop here or choose files to start uploading.'
+    home_choose: 'Choose files to start uploading.'
+    home_btn_choose_file: 'Choose Files'
 
     file_chooser_drop_it: 'Drop it to upload'
+    file_chooser_drop_them: 'Drop them to upload'
 
     util_bytes: '#{size|byte|bytes}'
 
@@ -157,6 +158,7 @@ translations =
     home_btn_choose_file: 'ファイルを選択'
 
     file_chooser_drop_it: 'ドロップしてアップロード'
+    file_chooser_drop_them: 'ドロップしてアップロード'
 
     util_bytes: '#{size}バイト'
 

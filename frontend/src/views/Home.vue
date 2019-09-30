@@ -38,8 +38,8 @@ export default
   methods:
     t: t
 
-    file_chosen: (file) ->
-      @$router.push name: 'upload', params: f: file
+    file_chosen: (files) ->
+      @$router.push name: 'upload', params: f: files
 
     canon_path: ->
       path = "/#{i18n.lang}/"

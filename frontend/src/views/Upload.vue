@@ -1,6 +1,6 @@
 <template lang="pug">
 .container
-  FileInfo(v-if="file" :file="file")
+  FileInfo(v-for="file, i in files" :file="file" :key="i")
   UploadInfo(v-if="upload_info" :info="upload_info")
 
   ActiveBox.active-box
@@ -16,7 +16,7 @@
       | {{ t('upload_quota_exceed', human_quota) }}
       ActionBar
         template(v-slot:left)
-          Button(@click="init") {{ t('app_cancel') }}
+          CancelButton(@click="init")
 
     UploadForm(
       v-if="status == 'form'"
@@ -74,11 +74,11 @@ export default
 
   props:
     f:
-      type: File
+      type: Array
       default: null
 
   data: ->
-    file: null
+    files: []
     status: 'file'
     upload_info: null
     upload_spec: null
@@ -96,12 +96,12 @@ export default
     t: t
 
     init: ->
-      @file = @upload_info = null
+      @files = @upload_info = null
       @status = 'file'
       @progress = 0
 
-    file_chosen: (file) ->
-      @file = file
+    file_chosen: (files) ->
+      @files = files
       try
         @status = 'query'
         @upload_spec = await api 'GET', '/uploads/info'
@@ -116,13 +116,16 @@ export default
 
     check_quota: ->
       remain = @upload_spec.quota - @upload_spec.usage
-      @file.size < remain
+      size = 0
+      for file in @files
+        size += file.size
+      size < remain
 
     submit: (data) ->
       try
         @upload_info = data
-        @upload = new Upload(
-          @file
+        @upload = Upload.create(
+          @files
           @upload_info
           @upload_spec.block_size
           (status, progress) =>
@@ -131,7 +134,7 @@ export default
         )
         secret = await @upload.upload()
         return unless secret
-        notification t('notification_upload'), @file.name
+        notification t('notification_upload'), @files[0].name
         expires = Date.now() + (@upload_info.period + 90*24*60*60) * 1000
         secrets.add @upload.id, secret, expires
         @$router.push name: 'uploaded_file', params: id: @upload.id

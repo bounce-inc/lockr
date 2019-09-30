@@ -1,5 +1,6 @@
 module.exports = {
   productionSourceMap: false,
+  transpileDependencies: ['crc'],
   devServer: {
     proxy: {
       '/api': {

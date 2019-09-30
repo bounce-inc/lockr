@@ -1,13 +1,13 @@
 <template lang="pug">
 .container
   .input-wrapper
-    input.input(type="file" @change="onInputChange" ref="input")
+    input.input(type="file" multiple @change="onInputChange" ref="input")
   slot(v-bind="{ open }")
 
   p.dropbox(v-if="dragging")
     DropIcon.icon
     |  
-    | {{ t('file_chooser_drop_it') }}
+    | {{ drop_message }}
 
   GlobalEvents(
     @dragover="onDragOver"
@@ -19,22 +19,24 @@
 <script lang="coffee">
 import DropIcon from 'vue-material-design-icons/Water'
 import GlobalEvents from 'vue-global-events'
-import i18n from '../i18n'
+import { t }  from '../i18n'
 import { is_file_readable } from '../util'
 import { show_error } from '../error'
 
 export default
   components: { DropIcon, GlobalEvents }
   data: ->
-    t: i18n.t.bind i18n
+    t: t
     dragging: false
     dragTimer: 0
+    items: 0
   methods:
     open: ->
       @$refs.input.click()
     onInputChange: (ev) ->
       return unless ev.target.files.length
-      @fileChosen ev.target.files[0]
+      files = [ev.target.files...]
+      @fileChosen files
       ev.target.value = null
     onDragOver: (ev) ->
       items = ev.dataTransfer.items
@@ -42,6 +44,7 @@ export default
         return if items[0].kind != 'file'
       ev.preventDefault()
       ev.dataTransfer.dropEffect = 'copy'
+      @items = items.length
       @dragging = true
       clearTimeout @dragTimer
     onDragLeave: ->
@@ -52,11 +55,18 @@ export default
       @dragging = false
       return unless ev.dataTransfer.files.length
       ev.preventDefault()
-      @fileChosen ev.dataTransfer.files[0]
-    fileChosen: (file) ->
-      unless await is_file_readable file
-        return show_error new Error 'fileread'
-      @$emit 'file-chosen', file
+      @fileChosen ev.dataTransfer.files
+    fileChosen: (files) ->
+      for file in files
+        unless await is_file_readable file
+          return show_error new Error 'fileread'
+      @$emit 'file-chosen', [files...]
+  computed:
+    drop_message: ->
+      if @items > 1
+        t('file_chooser_drop_them')
+      else
+        t('file_chooser_drop_it')
 </script>
 
 <style scoped lang="stylus">
