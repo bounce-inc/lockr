@@ -70,13 +70,13 @@ export default
     vertical-align -0.9rem
     &.expose
       width 2.4rem
-      opacity 1
+      opacity 0.7
 
 .has-mouse .fileinfo
   .icon
     width auto
   &:hover .icon
-    opacity 1
+    opacity 0.7
     
 .fileinfo::after
   content ''

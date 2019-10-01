@@ -5,10 +5,10 @@
       v-for="file in files"
       :key="file.name"
       :file="file"
-      removable
+      :removable="status === 'form'"
       @remove="remove_file(file)"
     )
-  .add-file(v-if="status !== 'file'")
+  .add-file(v-if="status === 'form'")
     FileChooser(v-slot="{ open }" @file-chosen="add_file")
       Button(@click="open")
         FolderIcon
