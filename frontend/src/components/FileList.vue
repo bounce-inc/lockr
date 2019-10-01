@@ -4,7 +4,7 @@
     LessIcon
     | 
     | {{ t('filelist_less') }}
-  FileInfo(
+  FileInfo.file-info(
     v-for="file in files_to_show"
     :key="file.name"
     :file="file"
@@ -15,10 +15,6 @@
     MoreIcon
     | 
     | {{ t('filelist_more', { count: more }) }}
-  .less(v-if="show_all" @click="show_all = false")
-    LessIcon
-    | 
-    | {{ t('filelist_less') }}
 </template>
 
 <script lang="coffee">
@@ -59,6 +55,8 @@ export default
   border-radius 1.2rem
   border 0.1rem solid #999
   margin 1.2rem 0
+.file-info:not(:last-child)
+  margin-bottom 0.4rem
 .more, .less
   font-size 1.4rem
   opacity 0.7

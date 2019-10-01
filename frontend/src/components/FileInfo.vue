@@ -47,9 +47,10 @@ export default
 
 <style scoped lang="stylus">
 .filename.bold
-  font-weight bold
-  font-size 2.0rem
   line-height 3.0rem
+  &.bold
+    font-weight bold
+    font-size 2.0rem
 .info
   float right
   .item
