@@ -14,6 +14,13 @@ footer
       rel="noopener"
     )
       FacebookIcon.icon(title="Facebook")
+    a(
+      v-if="i18n.lang == 'ja'"
+      href="http://b.hatena.ne.jp/entry/s/lockr.jp/ja/"
+      target="_blank"
+      rel="noopener"
+    )
+      HatenaBookmarkIcon.icon(title="はてなブックマーク")
 
   .github
     a(
@@ -48,14 +55,16 @@ footer
 <script lang="coffee">
 import FacebookIcon from 'vue-material-design-icons/FacebookBox'
 import GitHubIcon from 'vue-material-design-icons/GithubCircle'
+import HatenaBookmarkIcon from './HatenaBookmarkIcon'
 import TwitterIcon from 'vue-material-design-icons/Twitter'
 import i18n from '../i18n'
 
 export default
   components: {
-    GitHubIcon
-    TwitterIcon
     FacebookIcon
+    GitHubIcon
+    HatenaBookmarkIcon
+    TwitterIcon
   }
   data: -> { i18n }
   computed:
