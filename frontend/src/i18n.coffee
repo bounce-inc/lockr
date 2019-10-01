@@ -127,6 +127,8 @@ translations =
     error_zip_file_too_large_title: 'File is too large to zip'
     error_zip_file_too_large_detail: '''Files over 4GB cannnot be included in a
       ZIP file. Send it separately.'''
+    error_upload_too_many_title: 'Too many files'
+    error_upload_too_many_detail: 'You can upload up to 100 files at once.'
 
   ja:
     app_catch: 'セキュアなファイル転送をシンプルに'
@@ -250,6 +252,9 @@ translations =
     error_zip_file_too_large_title: 'ファイルがZIPにできません'
     error_zip_file_too_large_detail: '4GB以上のファイルはZIPに含めることが' +
       'できません。単独で送信してください。'
+    error_upload_too_many_title: 'ファイルが多すぎます'
+    error_upload_too_many_detail:
+        '一度にアップロードできるのは100ファイルまでです。'
 
 export default i18n =
   lang: 'en'

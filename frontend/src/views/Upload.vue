@@ -14,7 +14,8 @@
         FolderIcon
         | 
         | {{ t('upload_add_file') }}
-  UploadInfo(v-if="upload_info" :info="upload_info")
+
+  UploadInfo.upload-info(v-if="upload_info" :info="upload_info")
 
 
   ActiveBox.active-box
@@ -119,6 +120,10 @@ export default
       @progress = 0
 
     add_file: (files) ->
+      if @files.length + files.length > 100
+        show_error new Error 'upload_too_many'
+        return
+
       for file in files
         found = false
         for f in @files
@@ -127,6 +132,7 @@ export default
             break
         unless found
           @files.push file
+
       try
         unless @upload_spec
           @status = 'query'
@@ -194,6 +200,8 @@ export default
   align-items center
   .instruction
     flex-grow 1
+.upload-info
+  margin 1.6rem 0
 .v-move
   transition transform .2s
 .v-leave-active
