@@ -1,13 +1,14 @@
 <template lang="pug">
-.error-modal(v-if="error.title")
-  .error
-    .title
-      ErrorIcon.icon
-      | 
-      | {{ error.title }}
-    .detail(v-if="error.detail") {{ error.detail }}
-    .action
-      Button.button(@click="close_error") {{ t('app_btn_close') }}
+transition(appear)
+  .error-modal(v-if="error.title")
+    .error
+      .title
+        ErrorIcon.icon
+        | 
+        | {{ error.title }}
+      .detail(v-if="error.detail") {{ error.detail }}
+      .action
+        Button.button(@click="close_error") {{ t('app_btn_close') }}
 </template>
 
 <script lang="coffee">
@@ -66,4 +67,10 @@ export default
 <style lang="stylus">
 .error-modal .error .title .icon svg
   bottom 0
+
+.v-enter, .v-leave-to
+  opacity 0
+
+.v-enter-active, .v-leave-active
+  transition .2s
 </style>

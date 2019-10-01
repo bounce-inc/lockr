@@ -124,6 +124,9 @@ translations =
     error_websocket_title: 'WebSocket error'
     error_websocket_detail: 'WebSocket connection error.'
     error_fileread_title: 'File is not readable'
+    error_zip_file_too_large_title: 'File is too large to zip'
+    error_zip_file_too_large_detail: '''Files over 4GB cannnot be included in a
+      ZIP file. Send it separately.'''
 
   ja:
     app_catch: 'セキュアなファイル転送をシンプルに'
@@ -244,6 +247,9 @@ translations =
     error_websocket_title: 'WebSocketエラー'
     error_websocket_detail: 'WebSocketの接続にエラーが発生しました。'
     error_fileread_title: 'ファイルが読めません'
+    error_zip_file_too_large_title: 'ファイルがZIPにできません'
+    error_zip_file_too_large_detail: '4GB以上のファイルはZIPに含めることが' +
+      'できません。単独で送信してください。'
 
 export default i18n =
   lang: 'en'
