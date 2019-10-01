@@ -104,6 +104,8 @@ export default
       quota: human_readable_size @upload_spec.quota
       usage: human_readable_size @upload_spec.usage
 
+    instruction: -> if is_mobile then 'home_choose' else 'home_drop_or_choose'
+
   mounted: ->
     if @f then @add_file @f
 
@@ -177,9 +179,6 @@ export default
       @upload?.cancel()
       @upload_info = null
       @status = 'form'
-
-  computed:
-    instruction: -> if is_mobile then 'home_choose' else 'home_drop_or_choose'
 </script>
 
 <style scoped lang="stylus">
