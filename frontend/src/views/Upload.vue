@@ -202,8 +202,9 @@ export default
     flex-grow 1
 .upload-info
   margin 1.6rem 0
-.v-move
-  transition transform .2s
-.v-leave-active
-  display none
+
+.v-enter, .v-leave-to
+  opacity 0
+.v-leave-active, .v-enter-active
+  transition .2s
 </style>

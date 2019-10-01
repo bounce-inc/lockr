@@ -67,7 +67,7 @@ export default
     overflow hidden
     display inline-block
     transition .2s
-    vertical-align -0.9rem
+    vertical-align -1.0rem
     &.expose
       width 2.4rem
       opacity 0.7
