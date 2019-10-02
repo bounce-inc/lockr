@@ -113,6 +113,9 @@ translations =
     notification_upload: 'Upload completed!'
     notification_download: 'Download completed!'
 
+    login_email: 'Username or email address'
+    login_btn: 'Login'
+
     error_server: 'Server error'
     error_connection_title: 'Connection error'
     error_connection_detail: 'Failed to connect to the server.'
@@ -129,6 +132,8 @@ translations =
       ZIP file. Send it separately.'''
     error_upload_too_many_title: 'Too many files'
     error_upload_too_many_detail: 'You can upload up to 100 files at once.'
+    error_login_title: 'Login failed'
+    error_login_detail: 'Wrong username (email) or password.'
 
   ja:
     app_catch: 'セキュアなファイル転送をシンプルに'
@@ -238,6 +243,9 @@ translations =
     notification_upload: 'アップロードが完了しました'
     notification_download: 'ダウンロードが完了しました'
 
+    login_email: 'ユーザーIDまたはメールアドレス'
+    login_btn: 'ログイン'
+
     error_server: 'サーバーエラー'
     error_connection_title: '接続エラー'
     error_connection_detail: 'サーバーに接続できませんでした。'
@@ -255,6 +263,8 @@ translations =
     error_upload_too_many_title: 'ファイルが多すぎます'
     error_upload_too_many_detail:
         '一度にアップロードできるのは100ファイルまでです。'
+    error_login_title: 'ログインできません'
+    error_login_detail: 'ユーザIDまたはパスワードが違います。'
 
 export default i18n =
   lang: 'en'

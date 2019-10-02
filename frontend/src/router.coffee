@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Document from './views/Document'
+import Download from './views/Download'
 import Home from './views/Home'
+import Login from './views/Login'
+import Test from './views/Test'
 import Upload from './views/Upload'
 import UploadedFile from './views/UploadedFile'
-import Download from './views/Download'
-import Document from './views/Document'
-import Test from './views/Test'
 import { show_error } from './error'
 
 Vue.use Router
@@ -42,6 +43,9 @@ export default new Router
     component: Document
     props:
       document: 'privacy'
+  ,
+    path: '/login'
+    component: Login
   ,
     path: '*'
     component: NotFound
