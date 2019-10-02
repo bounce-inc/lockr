@@ -1,34 +1,6 @@
+import Queue from './queue'
 import crc32 from 'crc/crc32'
 import { str_to_bytes } from './encode'
-
-class Queue
-  constructor: (@max=10) ->
-    @queue = []
-    @reader = null
-    @writer = null
-    @err = null
-
-  read: ->
-    if @queue.length == 0
-      await new Promise (resolve) => @reader = resolve
-      @reader = null
-    throw @err if @err
-    @writer() if @writer
-    data = @queue.shift()
-    data
-
-  write: (data) ->
-    if @queue.length >= @max
-      await new Promise (resolve) => @writer = resolve
-      @writer = null
-    throw @err if @err
-    @queue.push data
-    @reader() if @reader
-
-  error: (e) ->
-    @err = e
-    @reader() if @reader
-    @writer() if @writer
 
 class ByteArray
   constructor: ->
@@ -152,12 +124,9 @@ class Entry
   length: -> 30 + @name.length + @file.size + 16
 
 export default class Zip
-  constructor: ->
-    @files = []
+  constructor: (files) ->
+    @files = (new Entry(file) for file in files)
     @queue = new Queue
-
-  add_file: (file) ->
-    @files.push new Entry file
 
   length: ->
     len = 22 # eocd
@@ -188,13 +157,13 @@ export default class Zip
     await @queue.write @eocd size, offset
 
   generate: ->
-    try
-      for file in @files
-        await file.generate @queue
-      await @central_directory()
-      await @queue.write new Uint8Array 0
-    catch e
-      console.error e
-      @queue.error e
-
-  read: -> @queue.read()
+    do =>
+      try
+        for file in @files
+          await file.generate @queue
+        await @central_directory()
+        await @queue.write new Uint8Array 0
+      catch e
+        console.error e
+        @queue.error e
+    @queue

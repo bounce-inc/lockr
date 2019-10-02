@@ -5,6 +5,7 @@ import Zip from './zip'
 import api, { set_api_host, reset_api_host, get_ws_prefix } from './api'
 import { b64encode, join_bytes } from './encode'
 import { sleep } from './util'
+import { file_reader, block_aligner } from './queue'
 
 export default class Upload
   @create: (files, args...) ->
@@ -39,6 +40,8 @@ export default class Upload
     if @info.password
       await @crypto.set_password @info.password
     @hmac = new Hmac await @crypto.get_sign_key()
+
+    @read_queue = @open()
 
   upload: ->
     try
@@ -77,7 +80,7 @@ export default class Upload
           @onprogress 'upload', progress / @total_size
         else
           throw new Error "Server error: #{msg}"
-      data = await @read_block offset
+      data = await @read_queue.read()
       if data.length == 0
         break
       @hmac.process data
@@ -98,7 +101,7 @@ export default class Upload
       return
 
     if offset != @total_size
-      throw new Error "Size mismatch #{offset}, #{@total_size}"
+      throw new Error 'File size changed while uploading'
 
     await ws.send new Uint8Array 0
 
@@ -127,13 +130,7 @@ export default class Upload
 class UploadSingle extends Upload
   get_size: -> @files[0].size
 
-  read_block: (offset) ->
-    new Promise (resolve, reject) =>
-      blob = @files[0].slice offset, offset + @block_size
-      reader = new FileReader
-      reader.onload = -> resolve new Uint8Array reader.result
-      reader.onerror = -> reject reader.error
-      reader.readAsArrayBuffer blob
+  open: -> file_reader @files[0], @block_size
 
   create_meta: ->
     file = @files[0]
@@ -144,25 +141,12 @@ class UploadSingle extends Upload
 
 class UploadZip extends Upload
   start: ->
-    @zip = new Zip
-    @zip.add_file file for file in @files
-    @buffer = new Uint8Array 0
-    @zip.generate()
+    @zip = new Zip @files
     super()
 
   get_size: -> @zip.length()
 
-  read_block: (offset) ->
-    return new Uint8Array 0 if @end
-    while @buffer.length < @block_size
-      chunk = await @zip.read()
-      if chunk.length == 0
-        @end = true
-        break
-      @buffer = join_bytes [@buffer, chunk]
-    block = @buffer.slice 0, @block_size
-    @buffer = @buffer.slice @block_size
-    block
+  open: -> block_aligner @zip.generate(), @block_size
 
   create_meta: ->
     now = new Date
