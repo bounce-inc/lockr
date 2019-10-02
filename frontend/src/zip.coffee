@@ -1,4 +1,4 @@
-import Queue from './queue'
+import Queue, { file_reader } from './queue'
 import crc32 from 'crc/crc32'
 import { str_to_bytes } from './encode'
 
@@ -52,22 +52,23 @@ class Entry
     if @file.size >= 4 * 1024 * 1024 * 1024
       throw new Error 'zip_file_too_large'
     if @name.length >= 1 << 16
-      throw new Error 'zip_file_name_too_long'
+      throw new Error 'Filename too long'
 
-  generate: (queue) ->
-    await queue.write @local_header()
-    await queue.write @name
-    offset = 0
+  generate: (outqueue) ->
+    await outqueue.write @local_header()
+    await outqueue.write @name
+    inqueue = file_reader @file, 65536
+    size = 0
     loop
-      data = await @read_file offset, 65536
+      data = await inqueue.read()
       if data.length == 0
         break
       @crc = crc32 data, @crc
-      await queue.write data
-      offset += data.length
-    if offset != @file.size
-      throw new Error 'zip_file_change'
-    await queue.write @descriptor()
+      await outqueue.write data
+      size += data.length
+    if size != @file.size
+      throw new Error 'File size changed while zipping'
+    await outqueue.write @descriptor()
 
   read_file: (offset, size) ->
     new Promise (resolve, reject) =>

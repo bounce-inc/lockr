@@ -61,7 +61,7 @@ export default class Upload
 
   send_body: (ws) ->
     last_report = Date.now()
-    offset = 0
+    size = 0
     block_num = 0
     buffered = 0
     progress = 0
@@ -87,7 +87,7 @@ export default class Upload
       enc_data = await @crypto.encrypt_block block_num, data
       await ws.send enc_data
       buffered++
-      offset += data.byteLength
+      size += data.byteLength
       block_num++
       now = Date.now()
       if now >= last_report + 10 * 1000
@@ -100,7 +100,7 @@ export default class Upload
       ws.close()
       return
 
-    if offset != @total_size
+    if size != @total_size
       throw new Error 'File size changed while uploading'
 
     await ws.send new Uint8Array 0
