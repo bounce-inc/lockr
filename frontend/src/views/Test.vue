@@ -35,6 +35,7 @@ import Spinner from '../components/Spinner'
 import i18n from '../i18n'
 import test from '../test'
 import Crypto from '../crypto'
+import { backend_info } from '../crypto-backend'
 
 export default
   components: { Button, Spinner }
@@ -55,7 +56,7 @@ export default
     test: ->
       crypto = new Crypto
       await crypto.init()
-      @backend_info = crypto.backend_info()
+      @backend_info = await backend_info()
 
       @ok = @ng = @finish = false
       @testing = true

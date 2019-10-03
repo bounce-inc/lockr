@@ -1,66 +1,15 @@
-import WebCrypto from './web-crypto'
-import WorkerCrypto from './worker-crypto'
+import backend from './crypto-backend'
 import base32Encode from 'base32-encode'
 import {
   b64encode
   b64decode
   str_to_bytes
   bytes_to_str
-  join_bytes
 } from './encode'
-
-build_backend = (alt='worker') ->
-  await import('webcrypto-shim') unless self.crypto
-
-  result = {}
-  need_alt = false
-
-  try
-    if WebCrypto.get_rand(32).length == 32
-      result.get_rand = WebCrypto.get_rand
-  catch e
-    need_alt = true
-
-  try
-    key = await WebCrypto.hmac_key new Uint8Array [1]
-    h = await WebCrypto.hmac key, new Uint8Array [1]
-    if b64encode(h) == 'AEKMNQv6FuIpBmOvOM-6D6A5AFfiqzgCNNYg59fjMss'
-      result.hmac_key = WebCrypto.hmac_key
-      result.hmac = WebCrypto.hmac
-  catch e
-    need_alt = true
-
-  try
-    s = await WebCrypto.stretch new Uint8Array([1]), new Uint8Array([1]), 1
-    if b64encode(s) == 'r-hb_mQ1KIkzOQIoLyWl6IqyPhty5NKVfezOn2BIF6A'
-      result.stretch = WebCrypto.stretch
-  catch e
-    need_alt = true
-
-  try
-    key = await WebCrypto.enc_key new Uint8Array 32
-    iv = new Uint8Array 16
-    plain = new Uint8Array [ 1, 2, 3, 4, 5 ]
-    encrypted = await WebCrypto.encrypt key, iv, plain
-    decryped =  await WebCrypto.decrypt key, iv, encrypted
-    if b64encode(decryped) == b64encode(plain)
-      result.enc_key = WebCrypto.enc_key
-      result.encrypt = WebCrypto.encrypt
-      result.decrypt = WebCrypto.decrypt
-  catch e
-    need_alt = true
-
-  if need_alt
-    if alt != 'worker'
-      throw new Error 'worker only for now'
-    alt_backend = WorkerCrypto()
-    { alt_backend..., result... }
-  else
-    result
 
 export default class Crypto
   init: (b64secret) ->
-    @backend = await build_backend()
+    @backend = await backend()
     if b64secret
       @secret = b64decode b64secret
     else
@@ -146,9 +95,3 @@ export default class Crypto
     key = await @get_auth_key()
     data = b64decode b64nonce
     b64encode await @backend.hmac key, data
-
-  backend_info: ->
-    get_rand: @backend.get_rand == WebCrypto.get_rand
-    hmac: @backend.hmac == WebCrypto.hmac
-    stretch: @backend.stretch == WebCrypto.stretch
-    encrypt: @backend.encrypt == WebCrypto.encrypt

@@ -5,10 +5,7 @@ import { str_to_bytes } from './encode'
 
 export default
   get_rand: (len) ->
-    # XXX not crypto safe
-    x = str_to_bytes Date.now().toString()
-    y = str_to_bytes Math.random().toString()
-    @hmac x, y
+    throw new Error 'This browser does not have crypto-safe PRNG.'
 
   hmac_key: (key) -> key
 
