@@ -49,7 +49,7 @@ export default
     margin-left 1.6rem
 
 .v-enter-active, .v-leave-active
-  transition transform 1s cubic-bezier(.7, 0, .3, 1)
+  transition 1s cubic-bezier(.7, 0, .3, 1)
 
 .v-enter, .v-leave-to
   transform translateY(100%)
