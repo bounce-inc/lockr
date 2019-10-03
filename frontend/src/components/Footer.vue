@@ -30,6 +30,9 @@ footer
     )
       GitHubIcon.icon(title="Source code")
 
+  .terms
+    router-link(to="/terms") {{ i18n.t('app_terms_of_use') }}
+
   .privacy
     router-link(to="/privacy") {{ i18n.t('app_privacy_policy') }}
 
@@ -91,7 +94,7 @@ footer
     cursor pointer
     white-space nowrap
 
-@media (max-width: 560px)
+@media (max-width: 640px)
   footer
     flex-direction column
     & > *

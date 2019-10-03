@@ -44,6 +44,11 @@ export default new Router
     props:
       document: 'privacy'
   ,
+    path: '/terms'
+    component: Document
+    props:
+      document: 'terms'
+  ,
     path: '/login'
     component: Login
   ,

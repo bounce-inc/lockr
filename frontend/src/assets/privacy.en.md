@@ -94,15 +94,3 @@ Tokyo 108-0074 Japan
 ### How to contact the appropriate authority
 
 Should you wish to report a complaint or if you feel that Bounce Inc. has not addressed your concern in a satisfactory manner, you may contact the supervisory authorities.
-
-### Disclaimer
-
-Due to end-to-end encryption, we cannot know anything about the content of data uploaded to Lockr.
-
-Bounce Inc. is not responsible for any damages caused by files downloaded from Lockr or other usage of Lockr.
-
-If you visit another site from Lockr via a link or banner, we will not be responsible for any information or services provided on that site.
-
-### Consent
-
-By using Lockr, you hereby consent to our Privacy Policy and agree to its Terms of Use.
