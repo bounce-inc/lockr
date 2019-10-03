@@ -14,7 +14,9 @@ ActiveBox.box
         type="password"
         v-model.trim="password"
       )
-    ActionBar
+    .spinner(v-if="busy")
+      Spinner
+    ActionBar(v-else)
       Button(primary)
         | {{ t('login_btn') }}
 </template>
@@ -23,34 +25,49 @@ ActiveBox.box
 import ActionBar from '../components/ActionBar'
 import ActiveBox from '../components/ActiveBox'
 import Button from '../components/Button'
+import Spinner from '../components/Spinner'
 import TextBox from '../components/TextBox'
 import api from '../api'
 import { show_error } from '../error'
 import { t } from '../i18n'
+import { sign_with_password } from '../password'
 
 export default
   components: {
     ActionBar
     ActiveBox
     Button
+    Spinner
     TextBox
   }
+  props:
+    url:
+      type: String
+      default: '/'
   data: ->
     email: ''
     password: ''
+    busy: false
   methods:
     t: t
     submit: ->
       try
+        @busy = true
+        email = encodeURIComponent @email
+        { salt, nonce } = await api 'GET', "/session/#{email}"
+        sign = await sign_with_password @password, salt, nonce
         await api 'POST', '/session', json:
           email: @email
-          password: @password
+          nonce: nonce
+          signature: sign
       catch e
         if e.status == 401
           e = new Error 'login'
         show_error e
         return
-      @$router.push '/'
+      finally
+        @busy = false
+      @$router.push @url
 </script>
 
 <style scoped lang="stylus">
@@ -64,4 +81,6 @@ label
   font-weight bold
 .input
   width 100%
+.spinner
+  margin-top 1.6rem
 </style>
