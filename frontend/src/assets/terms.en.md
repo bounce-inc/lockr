@@ -19,7 +19,7 @@ In the event that upload of data corresponding to these is detected, the Company
 
 The following actions are prohibited.
 
-- Distributing files to an unspecified recipients using services such as social networking service
+- Distributing files publicly to unspecified receipients
 - Overloading the computer and communication system of Lockr for purposes other than normal service use
 - Connecting to the production environment of Lockr by a modified client program
 
