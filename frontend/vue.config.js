@@ -19,7 +19,6 @@ module.exports = {
     output: { globalObject: 'this' }
   },
   chainWebpack: (config) => {
-    config.plugins.delete('preload')
     config.module
       .rule('html')
       .test(/\.html$/)
