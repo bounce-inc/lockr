@@ -23,6 +23,51 @@ import { t }  from '../i18n'
 import { is_file_readable } from '../util'
 import { show_error } from '../error'
 
+scan_entries = (items) ->
+  return null unless items?.length
+  item = items[0]
+  getAsEntry =
+    if typeof item.getAsEntry == 'function'
+      'getAsEntry'
+    else if typeof item.webkitGetAsEntry == 'function'
+      'webkitGetAsEntry'
+    else
+      null
+  return null unless getAsEntry
+
+  files = []
+
+  scan_entry = (entry, path) ->
+    if entry.isDirectory
+      new_path = [path..., entry.name]
+      reader = entry.createReader()
+      await new Promise (resolve, reject) ->
+        reader.readEntries ((entries) ->
+          for e in entries
+            await scan_entry e, new_path
+          resolve()
+        ), ((e) -> reject e)
+    else if entry.isFile
+      await new Promise (resolve, reject) ->
+        entry.file ((file) ->
+          pathname = [path..., file.name].join '/'
+          Object.defineProperty file, 'name', get: -> pathname
+          files.push file
+          resolve()
+        ), ((e) -> reject e)
+
+  # We can't access items after await, so start scanning them at once and
+  # later sort them.
+  await Promise.all(
+    for item in items
+      scan_entry item[getAsEntry](), []
+  )
+
+  files.sort (a, b) ->
+    if a.name < b.name then -1 else if a.name > b.name then 1 else 0
+
+  files
+
 export default
   components: { DropIcon, GlobalEvents }
   data: ->
@@ -40,11 +85,12 @@ export default
       ev.target.value = null
     onDragOver: (ev) ->
       items = ev.dataTransfer.items
-      if items?.length
-        return if items[0].kind != 'file'
+      if items
+        if items.length == 0 or items[0].kind != 'file'
+          return
       ev.preventDefault()
       ev.dataTransfer.dropEffect = 'copy'
-      @items = items.length
+      @items = items?.length
       @dragging = true
       clearTimeout @dragTimer
     onDragLeave: ->
@@ -53,9 +99,11 @@ export default
     onDrop: (ev) ->
       return unless @dragging
       @dragging = false
-      return unless ev.dataTransfer.files.length
       ev.preventDefault()
-      @fileChosen ev.dataTransfer.files
+      files = ev.dataTransfer.files # Save files before await
+      files = (await scan_entries ev.dataTransfer.items) or files
+      return unless files?.length
+      @fileChosen files
     fileChosen: (files) ->
       for file in files
         unless await is_file_readable file
