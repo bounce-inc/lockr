@@ -45,6 +45,8 @@ scan_entries = (items) ->
         reader.readEntries ((entries) ->
           for e in entries
             await scan_entry e, new_path
+            if files.length > 100
+              break
           resolve()
         ), ((e) -> reject e)
     else if entry.isFile
