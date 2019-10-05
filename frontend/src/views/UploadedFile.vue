@@ -1,6 +1,6 @@
 <template lang="pug">
 .container
-  FileInfo(v-if="meta" :file="meta")
+  FileInfo(v-if="meta" :file="meta" :zip="!!meta.manifest")
   .noinfo(v-if="!secret")
     .title
       QuestionIcon

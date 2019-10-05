@@ -13,18 +13,20 @@
     )
       CancelIcon(title="Delete")
   .filename(:class="{ bold: bold }")
-    FileIcon
+    ZipIcon(v-if="zip")
+    FileIcon(v-else)
     | {{ file.name }} 
 </template>
 
 <script lang="coffee">
-import CancelIcon from 'vue-material-design-icons/CloseCircle'
+import CancelIcon from 'vue-material-design-icons/Close'
 import FileIcon from 'vue-material-design-icons/File'
+import ZipIcon from 'vue-material-design-icons/FolderZip'
 import i18n from '../i18n'
 import { human_readable_size } from '../ui-util'
 
 export default
-  components: { CancelIcon, FileIcon }
+  components: { CancelIcon, FileIcon, ZipIcon }
   props:
     file:
       type: [File, Object]
@@ -35,6 +37,9 @@ export default
     bold:
       type: Boolean
       default: true
+    zip:
+      type: Boolean
+      default: false
   data: ->
     t: i18n.t.bind i18n
     expose_remove: false

@@ -1,6 +1,10 @@
 <template lang="pug">
 .container
-  FileInfo.fileinfo(v-if="file_info" :file="file_info")
+  FileInfo.fileinfo(
+    v-if="file_info"
+    :file="file_info"
+    :zip="file_info.manifest"
+  )
   FileList(v-if="file_info && file_info.manifest" :files="file_info.manifest")
 
   .error-frame(v-if="large_file") {{ t('download_large_file_warn') }}
