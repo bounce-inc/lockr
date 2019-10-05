@@ -46,8 +46,9 @@ export default
 </script>
 
 <style scoped lang="stylus">
-.filename.bold
+.filename
   line-height 3.0rem
+  word-break break-all
   &.bold
     font-weight bold
     font-size 2.0rem

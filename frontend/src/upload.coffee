@@ -1,6 +1,6 @@
 import Crypto from './crypto'
 import Hmac from './hmac'
-import PromisedWebSocket from './ws-promise'
+import QueuedWebSocket from './ws-queue'
 import Zip from './zip'
 import api, { set_api_host, reset_api_host, get_ws_prefix } from './api'
 import { b64encode, join_bytes } from './encode'
@@ -47,14 +47,14 @@ export default class Upload
     try
       await @start()
 
-      ws = new PromisedWebSocket "#{get_ws_prefix()}/upload"
-      await ws.open()
-      await ws.send @token
+      ws = new QueuedWebSocket
+      await ws.open "#{get_ws_prefix()}/upload"
+      await ws.write @token
 
       await @send_body ws
       return if @canceled
 
-      await @finish ws
+      await @finish()
       @crypto.get_b64secret()
     finally
       reset_api_host()
@@ -68,10 +68,8 @@ export default class Upload
     @onprogress 'upload', 0
     until @canceled
       msg = null
-      if buffered < 10
-        msg = ws.nonblocking_receive()
-      else
-        msg = await ws.receive()
+      if buffered >= 10
+        msg = await ws.read()
       break if @canceled
       if msg
         if msg == 'ACK'
@@ -85,7 +83,7 @@ export default class Upload
         break
       @hmac.process data
       enc_data = await @crypto.encrypt_block block_num, data
-      await ws.send enc_data
+      await ws.write enc_data
       buffered++
       size += data.byteLength
       block_num++
@@ -96,17 +94,17 @@ export default class Upload
 
     if @canceled
       await api 'PUT', "/uploads/#{@id}/cancel", json: token: @token
-      await ws.send 'CANCEL'
+      ws.write 'CANCEL'
       ws.close()
       return
 
     if size != @total_size
       throw new Error 'File size changed while uploading'
 
-    await ws.send new Uint8Array 0
+    ws.write new Uint8Array 0
 
     loop
-      data = await ws.receive()
+      data = await ws.read()
       if data == 'ACK'
         progress += @block_size
         @onprogress 'upload', progress / @total_size
@@ -115,7 +113,7 @@ export default class Upload
         break
       throw new Error "Server error: #{data}"
 
-  finish: (ws) ->
+  finish: ->
     meta = await @crypto.encrypt_metadata @create_meta()
 
     api 'PUT', "/uploads/#{@id}/complete", json:

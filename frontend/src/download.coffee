@@ -3,7 +3,6 @@ import api from './api'
 import { sleep, has_service_worker, ws_url } from './util'
 import Hmac from './hmac'
 import { b64encode } from './encode'
-import PromisedWebSocket from './ws-promise'
 import Decrypter from './decrypter'
 
 save_url = (url, filename) ->

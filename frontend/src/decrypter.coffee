@@ -1,6 +1,6 @@
 import Hmac from './hmac'
 import { b64encode } from './encode'
-import PromisedWebSocket from './ws-promise'
+import QueuedWebSocket from './ws-queue'
 import api, { set_api_host, reset_api_host, get_ws_prefix } from './api'
 
 export default class Decrypter
@@ -15,19 +15,19 @@ export default class Decrypter
       @token = res.token
       set_api_host res.host
       hmac = new Hmac await @crypto.get_sign_key()
-      ws = new PromisedWebSocket "#{get_ws_prefix()}/download"
-      await ws.open()
-      await ws.send @token
+      ws = new QueuedWebSocket
+      await ws.open "#{get_ws_prefix()}/download"
+      await ws.write @token
       loop
         if @canceled
           throw new Error 'CANCEL'
         now = Date.now()
-        data = await ws.receive()
+        data = await ws.read()
         if typeof data == 'string'
           if data == 'EOF'
             break
           throw new Error "Server error: #{data}"
-        await ws.send 'ACK'
+        await ws.write 'ACK'
         enc_data = new Uint8Array data
         dec_data = await @crypto.decrypt_block block_num, enc_data
         await @push dec_data
@@ -47,7 +47,7 @@ export default class Decrypter
       else
         console.error e
       try
-        await ws?.send 'CANCEL'
+        await ws?.write 'CANCEL'
         ws?.close()
       catch
       @error e
