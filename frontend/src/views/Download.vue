@@ -3,7 +3,7 @@
   FileInfo.fileinfo(
     v-if="file_info"
     :file="file_info"
-    :zip="file_info.manifest"
+    :zip="!!file_info.manifest"
   )
   FileList(v-if="file_info && file_info.manifest" :files="file_info.manifest")
 

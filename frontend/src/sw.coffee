@@ -1,5 +1,6 @@
 import Crypto from './crypto'
 import Decrypter from './decrypter'
+import Queue from './queue'
 
 downloads = {}
 last_id = 0
@@ -9,32 +10,17 @@ class StreamDecrypter extends Decrypter
     super()
     Object.assign @, params
 
-  push: (data) ->
-    if @ctrl.desiredSize <= 0
-      await new Promise (resolve, reject) =>
-        timeout = setTimeout (=>
-          @cancel()
-          resolve false
-        ), 15000
-        @sleeper = ->
-          clearTimeout timeout
-          resolve true
-    @ctrl.enqueue data
-
-  resume: ->
-    if @sleeper
-      @sleeper()
-      @sleeper = null
+  push: (data) -> await @queue.write data
 
   onprogress: (status, progress) ->
     @port.postMessage type: 'progress', param: { status, progress }
 
   finish: ->
-    @ctrl.close()
+    @queue.write new Uint8Array 0
     @port.postMessage type: 'end'
 
   error: (e) ->
-    @ctrl.error()
+    @queue.error e
     unless e.message == 'CANCEL'
       @port.postMessage type: 'error', param:
         message: e.message
@@ -46,13 +32,37 @@ class Download
     Object.assign @, params
     @port = port
     @crypto = new Crypto
+    @queue = new Queue
 
   respond: ->
+    timer = null
+
     stream = new ReadableStream
-      start: (ctrl) =>
-        @download ctrl
+      start: =>
+        @download()
         return # not to return promise
-      pull: => @resume()
+
+      pull: (ctrl) =>
+        try
+          data = await @queue.read()
+        catch e
+          ctrl.error()
+          return
+
+        if data.length == 0
+          clearTimeout timer if timer
+          ctrl.close()
+        else
+          ctrl.enqueue data
+
+          # Chrome doesn't call cancel so use timeout
+          clearTimeout timer if timer
+          timer = setTimeout (=>
+            console.log 'here'
+            @cancel()
+            ctrl.error()
+          ), 15 * 1000
+
       cancel: => @cancel()
 
     new Response stream, headers:
@@ -63,7 +73,7 @@ class Download
       'X-Content-Type-Options': 'nosniff'
       # Last-Modified
 
-  download: (ctrl) ->
+  download: ->
     await @crypto.init @secret
     @crypto.set_salt @salt
     @decrypter = new StreamDecrypter
@@ -72,8 +82,8 @@ class Download
       token: @token
       meta: @meta
       signature: @signature
-      ctrl: ctrl
       port: @port
+      queue: @queue
     @decrypter.decrypt()
 
   cancel: ->
