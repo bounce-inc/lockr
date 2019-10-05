@@ -8,6 +8,9 @@ In many conventional file transfer services, there are points where files are ha
 
 Lockr encrypts the file in the sender's browser with AES-256 before sending it to the server, and decrypts it in the recipient's browser. The encryption key is never sent to the server, so even we operators cannot know the contents of the file.
 
+<small>In addition to the contents of the file, metadata such as the file name is also subject to encryption. The only thing we can know is the approximate file size. </small>
+ 
+
 ## Double encryption
 
 Data encrypted on the client side is encrypted again on the server side with AES-256. The encryption key is generated for each upload and discarded when the file is deleted. For this reason, once a file is deleted, the original data cannot be retrieved even if the deleted file can be restored.
@@ -28,8 +31,10 @@ When uploading, you can set the file expiration date and the maximum number of d
 
 ## Password protection
 
-You can set a password when uploading. The download link is cryptographically unpredictable, so you don't need to set a password unless the link is likely to be seen by a third party.
+You can set a password when uploading.
 
-If you have to share the link in a possibly insecure manner, you can maintain security by setting a password and sending it separately from the link. There is no point in sending the link and password over the same route.
+The download link is cryptographically unpredictable, so you don't need to set a password unless the link is likely to be seen by a third party.
 
-To send a password, we recommend another service of ours, <a href="https://one-time.link/" target="_blank" rel="noopener">One Time Link</a>.
+If you have to send the link in a possibly insecure manner, you can maintain security by setting a password and sharing it separately from the link. There is no point in sending the link and password over the same route.
+
+To send a password, we recommend <a href="https://one-time.link/" target="_blank" rel="noopener">One Time Link</a>, another service of ours.
