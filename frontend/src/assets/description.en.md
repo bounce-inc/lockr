@@ -32,4 +32,4 @@ You can set a password when uploading. The download link is cryptographically un
 
 If you have to share the link in a possibly insecure manner, you can maintain security by setting a password and sending it separately from the link. There is no point in sending the link and password over the same route.
 
-To send a password, we recommend our another service <a href="https://one-time.link/" target="_blank" rel="noopener">One Time Link</a>.
+To send a password, we recommend another service of ours, <a href="https://one-time.link/" target="_blank" rel="noopener">One Time Link</a>.
