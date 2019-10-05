@@ -9,7 +9,7 @@ transition(appear)
 import Button from './Button'
 import { t } from '../i18n'
 
-KEY = 'lockr_cookie_notice'
+KEY = 'lockr_agreement'
 
 export default
   components: { Button }

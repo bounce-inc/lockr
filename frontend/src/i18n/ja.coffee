@@ -28,9 +28,11 @@ export default
   app_terms_of_use: '利用規約'
   app_privacy_policy: 'プライバシーポリシー'
 
-  cookie_notice: 'このサイトはCookieを使用しています。詳しくは' +
-    '<a href="/privacy" target="_blank">プライバシーポリシー</a>' +
-    'をご覧ください。'
+  cookie_notice: 'このサイトはCookieを使用しています。' +
+    'このサイトを使用することにより、あなたは' +
+    '<a href="/privacy" target="_blank">プライバシーポリシー</a>と' +
+    '<a href="/terms" target="_blank">利用規約</a>に同意したことになります。'
+
 
   home_drop_or_choose:
     'ファイルを選択するかドラッグ&ドロップしてアップロードを開始します。'
