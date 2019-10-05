@@ -1,69 +1,66 @@
 import Crypto from './crypto'
-import Decrypter from './decrypter'
+import decrypt from './decrypt'
 import Queue from './queue'
 
 downloads = {}
 last_id = 0
 
-class StreamDecrypter extends Decrypter
-  constructor: (params) ->
-    super()
-    Object.assign @, params
+class StreamController
+  constructor: (@queue, @port) ->
+    @timer = null
 
-  push: (data) -> await @queue.write data
+  pull: (ctrl) ->
+    try
+      data = await @queue.read()
+    catch e
+      ctrl.error()
+      unless e.message == 'CANCEL'
+        @port.postMessage type: 'error', param:
+          message: e.message
+          detail: e.detail
+          status: e.status
+      return
 
-  onprogress: (status, progress) ->
-    @port.postMessage type: 'progress', param: { status, progress }
+    if data.length == 0
+      clearTimeout @timer if @timer
+      ctrl.close()
+      @port.postMessage type: 'end'
+    else
+      ctrl.enqueue data
 
-  finish: ->
-    @queue.write new Uint8Array 0
-    @port.postMessage type: 'end'
+      # Chrome doesn't call cancel so use timeout
+      clearTimeout @timer if @timer
+      @timer = setTimeout (=>
+        @cancel()
+        ctrl.error()
+      ), 15 * 1000
 
-  error: (e) ->
-    @queue.error e
-    unless e.message == 'CANCEL'
-      @port.postMessage type: 'error', param:
-        message: e.message
-        detail: e.detail
-        status: e.status
+  cancel: ->
+    @queue.error new Error 'CANCEL'
+    clearTimeout @timer if @timer
 
 class Download
   constructor: (params, port) ->
     Object.assign @, params
     @port = port
     @crypto = new Crypto
-    @queue = new Queue
+
+  download: ->
+    await @crypto.init @secret
+    @crypto.set_salt @salt
+    @queue = decrypt
+      id: @id
+      crypto: @crypto
+      token: @token
+      meta: @meta
+      signature: @signature
+      port: @port
+      onprogress: (status, progress) ->
+        @port.postMessage type: 'progress', param: { status, progress }
 
   respond: ->
-    timer = null
-
-    stream = new ReadableStream
-      start: =>
-        @download()
-        return # not to return promise
-
-      pull: (ctrl) =>
-        try
-          data = await @queue.read()
-        catch e
-          ctrl.error()
-          return
-
-        if data.length == 0
-          clearTimeout timer if timer
-          ctrl.close()
-        else
-          ctrl.enqueue data
-
-          # Chrome doesn't call cancel so use timeout
-          clearTimeout timer if timer
-          timer = setTimeout (=>
-            console.log 'here'
-            @cancel()
-            ctrl.error()
-          ), 15 * 1000
-
-      cancel: => @cancel()
+    ctrl = new StreamController @queue, @port
+    stream = new ReadableStream ctrl
 
     new Response stream, headers:
       'Content-Type': @meta.type or 'application/octet-stream'
@@ -73,24 +70,8 @@ class Download
       'X-Content-Type-Options': 'nosniff'
       # Last-Modified
 
-  download: ->
-    await @crypto.init @secret
-    @crypto.set_salt @salt
-    @decrypter = new StreamDecrypter
-      id: @id
-      crypto: @crypto
-      token: @token
-      meta: @meta
-      signature: @signature
-      port: @port
-      queue: @queue
-    @decrypter.decrypt()
-
   cancel: ->
-    @decrypter?.cancel()
-
-  resume: ->
-    @decrypter?.resume()
+    @queue?.error new Error 'CANCEL'
 
 self.addEventListener 'install', (ev) ->
   console.log 'sw installed'
@@ -121,7 +102,8 @@ self.addEventListener 'message', (ev) ->
     switch command
       when 'start'
         id = ++last_id
-        downloads[id] = new Download param, port
+        downloads[id] = download = new Download param, port
+        await download.download()
         port.postMessage id
       when 'ping'
         port.postMessage 'pong'

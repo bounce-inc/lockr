@@ -3,7 +3,7 @@ import api from './api'
 import { sleep, has_service_worker, ws_url } from './util'
 import Hmac from './hmac'
 import { b64encode } from './encode'
-import Decrypter from './decrypter'
+import decrypt from './decrypt'
 
 save_url = (url, filename) ->
   a = document.createElement 'a'
@@ -56,38 +56,38 @@ export default class Download
     lastModified: @meta.last_modified
     manifest: @meta.manifest
 
-class BlobDecrypter extends Decrypter
-  constructor: (params) ->
-    super()
-    Object.assign @, params
-    @array = []
-
-  push: (data) -> @array.push new Blob [data]
-  
-  error: (e) -> throw e unless e.message == 'CANCEL'
-
-  finish: ->
-    await sleep 1
-    blob = new Blob @array, type: @meta.type
-    if navigator.msSaveBlob
-      navigator.msSaveBlob blob, @meta.name
-    else
-      url = URL.createObjectURL blob
-      save_url url, @meta.name
-      setTimeout (-> URL.revokeObjectURL url), 60*1000
-
 class DownloadBlob extends Download
   download: (onprogress) ->
-    @decrypter = new BlobDecrypter
+    @queue = decrypt
       id: @id
       crypto: @crypto
       token: @token
       meta: @meta
       onprogress: onprogress
       signature: @signature
-    @decrypter.decrypt()
 
-  cancel: -> @decrypter.cancel()
+    try
+      array =
+        loop
+          data = await @queue.read()
+          if data.length == 0
+            break
+          new Blob [data]
+
+      blob = new Blob array, type: @meta.type
+
+      if navigator.msSaveBlob
+        navigator.msSaveBlob blob, @meta.name
+      else
+        url = URL.createObjectURL blob
+        save_url url, @meta.name
+        setTimeout (-> URL.revokeObjectURL url), 60*1000
+    catch e
+      unless e.message == 'CANCEL'
+        @cancel()
+        throw e
+
+  cancel: -> @queue.error new Error 'CANCEL'
 
 class DownloadStream extends Download
   download: (onprogress) ->
