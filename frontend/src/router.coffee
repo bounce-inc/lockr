@@ -18,6 +18,11 @@ NotFound = render: ->
 export default new Router
   mode: 'history'
   base: process.env.BASE_URL
+  scrollBehavior: (to, from, saved_position) ->
+    if saved_position
+      saved_position
+    else
+      x: 0, y: 0
   routes: [
     path: '/(ja|en)?/'
     name: 'home'

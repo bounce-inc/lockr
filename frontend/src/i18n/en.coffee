@@ -31,7 +31,7 @@ export default
   app_privacy_policy: 'Privacy Policy'
 
   cookie_notice: '''
-    This website uses Cookies. By using this website, you are agreeing to our
+    This website uses Cookies.<br>By using this website, you are agreeing to our
     <a href="/privacy" target="_blank">Privacy Policy</a> and
     <a href="/terms" target="_blank">Terms of Use</a>.'''
 

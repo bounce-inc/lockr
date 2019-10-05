@@ -30,11 +30,11 @@ footer
     )
       GitHubIcon.icon(title="Source code")
 
-  .terms
-    router-link(to="/terms") {{ i18n.t('app_terms_of_use') }}
-
   .privacy
     router-link(to="/privacy") {{ i18n.t('app_privacy_policy') }}
+
+  .terms
+    router-link(to="/terms") {{ i18n.t('app_terms_of_use') }}
 
   .lang
     a(

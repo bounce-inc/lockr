@@ -20,14 +20,19 @@ export default
     close: ->
       localStorage[KEY] = 'OK'
       @show = false
-  mounted: ->
-    @show = not localStorage[KEY]
+    set_show: ->
+      setTimeout (=>
+        if @$route.path not in ['/terms', '/privacy']
+          @show = not localStorage[KEY]
+      ), 1000
+  mounted: -> @set_show()
   watch:
     show: (val) ->
       if val
         @$emit 'show'
       else
         @$emit 'hide'
+    $route: -> @set_show()
 </script>
 
 <style scoped lang="stylus">
@@ -57,4 +62,5 @@ export default
 @media (max-width: 480px)
   .notice p
     font-size 1.2rem
+    line-height 1.6rem
 </style>
