@@ -31,3 +31,5 @@ When uploading, you can set the file expiration date and the maximum number of d
 You can set a password when uploading. The download link is cryptographically unpredictable, so you don't need to set a password unless the link is likely to be seen by a third party.
 
 If you have to share the link in a possibly insecure manner, you can maintain security by setting a password and sending it separately from the link. There is no point in sending the link and password over the same route.
+
+To send a password, we recommend our another service <a href="https://one-time.link/" target="_blank" rel="noopener">One Time Link</a>.
