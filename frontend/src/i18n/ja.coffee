@@ -103,6 +103,7 @@ export default
     '<a href="https://forest.watch.impress.co.jp/library/software/7zip/"' +
     ' target="_blank" rel="noopener">7-Zip</a> ' +
     '等をお使いください。'
+  download_qr: 'モバイルでダウンロード'
 
   notification_description:
     '転送完了時にデスクトップ通知を受け取ることができます。'

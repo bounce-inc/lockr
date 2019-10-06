@@ -27,7 +27,7 @@
 
     .mobile(v-if="!is_mobile")
       .qr(v-html="qr")
-      p モバイルでダウンロード
+      p {{ t('download_qr') }}
 
   .error-frame(v-if="status == 'error'")
     span(v-if="error == 'downloads'")
