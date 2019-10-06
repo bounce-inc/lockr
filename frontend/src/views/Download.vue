@@ -25,6 +25,10 @@
       ErrorIcon.icon
       | {{ t('download_wrong_password') }}
 
+    .mobile(v-if="!is_mobile")
+      .qr(v-html="qr")
+      p モバイルでダウンロード
+
   .error-frame(v-if="status == 'error'")
     span(v-if="error == 'downloads'")
       | {{ t('app_deleted_downloads') }}
@@ -73,7 +77,8 @@ import ProgressBar from '../components/ProgressBar'
 import Spinner from '../components/Spinner'
 import TextBox from '../components/TextBox'
 import notification from '../notification'
-import { has_service_worker } from '../util'
+import qrcode from 'pure-svg-code/qrcode'
+import { has_service_worker, is_mobile } from '../util'
 import { show_error } from '../error'
 import { t } from '../i18n'
 
@@ -100,6 +105,7 @@ export default
     progress: 0
     status: 'query'
     wrong_password: false
+    is_mobile: is_mobile
 
   computed:
     large_file: ->
@@ -114,6 +120,12 @@ export default
         if /[^\x20-\x7f]/.test file.name
           return true
       false
+    qr: ->
+      qrcode
+        content: location.href
+        padding: 4
+        width: 128
+        height: 128
 
   mounted: ->
     @start()
@@ -217,4 +229,9 @@ form
   text-align center
   margin-top 2rem
 
+.mobile
+  margin 3.2rem 0
+  p
+    font-size 1.4rem
+    opacity 0.7
 </style>
