@@ -33,10 +33,10 @@ export default
     '<a href="/privacy" target="_blank">プライバシーポリシー</a>と' +
     '<a href="/terms" target="_blank">利用規約</a>に同意したことになります。'
 
-
-  home_drop_or_choose:
-    'ファイルを選択するかドラッグ&ドロップしてアップロードを開始します。'
-  home_choose: 'ファイルを選択してアップロードを開始します。'
+  home_drop_or_choose: 'ファイルの送信はとても簡単です。<br>' +
+    'ファイルを選択するかここにドロップしてください。'
+  home_choose:
+    'ファイルの送信はとても簡単です。<br>送信するファイルを選択してください。'
   home_btn_choose_file: 'ファイルを選択'
 
   file_chooser_drop_it: 'ドロップしてアップロード'
@@ -53,6 +53,9 @@ export default
   fileinfo_size: 'サイズ'
   fileinfo_last_modified: '最終更新'
 
+  upload_drop_or_choose:
+    '送信するファイルを選択するかここにドロップしてください。'
+  upload_choose: '送信するファイルを選択してください。'
   upload_add_file: 'ファイルを追加'
   upload_uploading: '暗号化してアップロードしています...'
   upload_max_dl: '最大ダウンロード回数'

@@ -35,8 +35,9 @@ export default
     <a href="/privacy" target="_blank">Privacy Policy</a> and
     <a href="/terms" target="_blank">Terms of Use</a>.'''
 
-  home_drop_or_choose: 'Drop here or choose files to start uploading.'
-  home_choose: 'Choose files to start uploading.'
+  home_drop_or_choose:
+    'Sending files is so easy.<br>Just drop here or choose files.<br>'
+  home_choose: 'Sending files is so easy.<br>Just choose files.'
   home_btn_choose_file: 'Choose Files'
 
   file_chooser_drop_it: 'Drop it to upload'
@@ -53,6 +54,9 @@ export default
   fileinfo_size: 'Size'
   fileinfo_last_modified: 'Last Modified'
 
+  upload_drop_or_choose:
+    'Drop here or choose files to upload.'
+  upload_choose: 'Choose files to upload.'
   upload_add_file: 'Add Files'
   upload_uploading: 'Encrypting and uploading...'
   upload_max_dl: 'Maximum downloads'

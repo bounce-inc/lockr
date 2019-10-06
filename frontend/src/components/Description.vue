@@ -20,15 +20,17 @@ export default
 .description
   margin-top 3.2rem
   h2
-    margin 2.4rem 0 0.8rem
+    margin-top 2.0rem
+    line-height 3.2rem
     padding 0.8rem 0
     font-size 2.4rem
     border-bottom 0.1rem solid #666
   p
-    margin 0.8rem 0
+    margin 1.2rem 0
     line-height 2.4rem
-  small
+  blockquote p
     font-size 1.4rem
+    line-height 2.0rem
     opacity 0.7
     margin-left 0.8rem
     &::before

@@ -2,12 +2,13 @@
 .container
   ActiveBox.active-box
     .chooser-box
-      .instruction {{ t(instruction) }}
-      FileChooser(v-slot="{ open }" @file-chosen="file_chosen")
-        Button(primary @click="open")
-          FolderIcon
-          | 
-          | {{ t('home_btn_choose_file') }}
+      .instruction(v-html="t(instruction)")
+      .btn-bar
+        FileChooser(v-slot="{ open }" @file-chosen="file_chosen")
+          Button(primary @click="open")
+            FolderIcon
+            | 
+            | {{ t('home_btn_choose_file') }}
   Description
 </template>
 
@@ -62,16 +63,18 @@ export default
 .active-box
   margin-bottom 1.6rem
 .chooser-box
-  width 100%
   display flex
-  justify-content space-between
-  align-items center
+  align-items flex-end
   .instruction
     flex-grow 1
-
-@media (max-width: 480px)
+[lang="en"]
+  .instruction
+    font-size 2.0rem
+.btn-bar
+  margin-top 0.8rem
+  text-align right
+@media (max-width 640px)
   .chooser-box
     flex-direction column
-    .instruction
-      margin-bottom .8rem
+    align-items center
 </style>

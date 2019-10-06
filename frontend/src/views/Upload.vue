@@ -17,7 +17,6 @@
 
   UploadInfo.upload-info(v-if="upload_info" :info="upload_info")
 
-
   ActiveBox.active-box
     .chooser-box(v-if="status == 'file'")
       .instruction {{ t(instruction) }}
@@ -105,7 +104,8 @@ export default
       quota: human_readable_size @upload_spec.quota
       usage: human_readable_size @upload_spec.usage
 
-    instruction: -> if is_mobile then 'home_choose' else 'home_drop_or_choose'
+    instruction: ->
+      if is_mobile then 'upload_choose' else 'upload_drop_or_choose'
 
   mounted: ->
     if @f then @add_file @f
@@ -207,4 +207,10 @@ export default
   opacity 0
 .v-leave-active, .v-enter-active
   transition .2s
+
+@media (max-width 640px)
+  .chooser-box
+    flex-direction column
+    .instruction
+      margin-bottom 0.8rem
 </style>

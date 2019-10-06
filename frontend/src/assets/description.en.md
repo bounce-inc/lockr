@@ -8,7 +8,7 @@ In many conventional file transfer services, there are points where files are ha
 
 Lockr encrypts the file in the sender's browser with AES-256 before sending it to the server, and decrypts it in the recipient's browser. The encryption key is never sent to the server, so even we operators cannot know the contents of the file.
 
-<small>In addition to the contents of the file, metadata such as the file name is also subject to encryption. The only thing we can know is the approximate file size. </small>
+> In addition to the contents of the file, metadata such as the file name is also subject to encryption. The only thing we can know is the approximate file size.
  
 
 ## Double encryption
@@ -23,7 +23,7 @@ Up to 5GB can be used per user.
 
 In addition to all modern browsers, Internet Explorer 11 is supported.
 
-<small>Some browsers may not be able to download very large files.</small>
+> Some browsers may not be able to download very large files.
 
 ## Automatic expiration
 
