@@ -39,4 +39,6 @@ export default
   .description
     p
       line-height 2.8rem
+    blockquote p
+      line-height 2.0rem
 </style>
