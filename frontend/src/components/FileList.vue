@@ -9,6 +9,8 @@
     :key="file.name"
     :file="file"
     :bold="false"
+    :removable="removable"
+    @remove="remove(file)"
   )
   .more(v-if="more" @click="show_all = true")
     DotsIcon.dots
@@ -32,6 +34,9 @@ export default
     files:
       type: Array
       required: true
+    removable:
+      type: Boolean
+      default: false
   data: ->
     show_all: false
   computed:
@@ -47,6 +52,9 @@ export default
         Math.max 0, @files.length - N
   methods:
     t: t
+    remove: (file) ->
+      i = @files.indexOf file
+      @files.splice i, 1
 </script>
 
 <style scoped lang="stylus">
@@ -56,7 +64,7 @@ export default
   border 0.1rem solid #999
   margin 1.2rem 0
 .file-info:not(:last-child)
-  margin-bottom 0.4rem
+  margin-bottom 0.8rem
 .more, .less
   font-size 1.4rem
   opacity 0.7

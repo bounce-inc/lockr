@@ -1,12 +1,10 @@
 <template lang="pug">
 .container
-  FileInfo.file-info(
-    v-for="file in files"
-    :key="file.name"
-    :file="file"
-    :removable="status === 'form'"
-    @remove="remove_file(file)"
-  )
+  FileInfo(v-if="files.length == 1" :file="files[0]")
+  FileInfo(v-if="files.length > 1" zip :file="zip_info")
+  
+  FileList(v-if="files.length > 1" :files="files" removable)
+
   .add-file(v-if="status === 'form'")
     FileChooser(v-slot="{ open }" @file-chosen="add_file")
       Button(@click="open")
@@ -49,6 +47,7 @@ import Button from '../components/Button'
 import CancelButton from '../components/CancelButton'
 import FileChooser from '../components/FileChooser'
 import FileInfo from '../components/FileInfo'
+import FileList from '../components/FileList'
 import FolderIcon from 'vue-material-design-icons/Folder'
 import NotificationRequest from '../components/NotificationRequest'
 import ProgressBar from '../components/ProgressBar'
@@ -56,6 +55,7 @@ import Spinner from '../components/Spinner'
 import Upload from '../upload'
 import UploadForm from '../components/UploadForm'
 import UploadInfo from '../components/UploadInfo'
+import Zip from '../zip'
 import api from '../api'
 import notification from '../notification'
 import secrets from '../secrets'
@@ -72,6 +72,7 @@ export default
     CancelButton
     FileChooser
     FileInfo
+    FileList
     FolderIcon
     NotificationRequest
     ProgressBar
@@ -100,8 +101,12 @@ export default
     instruction: ->
       if is_mobile then 'upload_choose' else 'upload_drop_or_choose'
 
-  mounted: ->
-    if @f then @add_file @f
+    zip_info: ->
+      zip = new Zip @files
+      name: t 'upload_files', count: @files.length
+      size: zip.length()
+
+  mounted: -> if @f then @add_file @f
 
   methods:
     t: t
@@ -117,7 +122,7 @@ export default
         show_error new Error 'upload_too_many'
         return
 
-      orig_files = [@files...]
+      orig_files = @files.slice 0
 
       for file in files
         found = false
@@ -135,7 +140,14 @@ export default
         @check_quota()
         @status = 'form'
       catch e
-        show_error e, => @files = orig_files
+        @status = 'file' if @status = 'query'
+        show_error e, =>
+          @files = orig_files
+          @status =
+            if @files.length
+              'form'
+            else
+              'file'
 
     remove_file: (file) ->
       i = @files.indexOf file

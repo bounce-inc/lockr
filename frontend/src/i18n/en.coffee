@@ -61,6 +61,7 @@ export default
   upload_uploading: 'Encrypting and uploading...'
   upload_max_dl: 'Maximum downloads'
   upload_period: 'Available for'
+  upload_files: '#{count|File|Files}'
 
   uploadform_tip_max_dl:
     'For security, select the smallest possible number.'

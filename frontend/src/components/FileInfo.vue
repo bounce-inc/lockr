@@ -4,18 +4,18 @@
   v-touch:swipe.left="swipeLeft"
   v-touch:swipe.right="swipeRight"
 )
-  .info
-    span.item {{ size }}
-    span.icon(
-      v-if="removable"
-      @click="$emit('remove')"
-      :class="{ expose: expose_remove }"
-    )
-      CancelIcon(title="Delete")
   .filename(:class="{ bold: bold }")
     ZipIcon(v-if="zip")
     FileIcon(v-else)
+    | 
     | {{ file.name }} 
+  .item {{ size }}
+  .icon(
+    v-if="removable"
+    @click="$emit('remove')"
+    :class="{ expose: expose_remove }"
+  )
+    CancelIcon(title="Delete")
 </template>
 
 <script lang="coffee">
@@ -51,42 +51,39 @@ export default
 </script>
 
 <style scoped lang="stylus">
+.fileinfo
+  display flex
+  align-items center
 .filename
-  line-height 3.0rem
+  flex-grow 1
   word-break break-all
   &.bold
     font-weight bold
     font-size 2.0rem
-.info
-  float right
-  .item
-    font-size 1.4rem
-    line-height 3.0rem
+.item
+  font-size 1.4rem
+  opacity 0.7
+  margin-left 0.4rem
+.icon
+  padding-left 0.4rem
+  font-size 2rem
+  line-height 1
+  transform translateY(-0.125em)
+  cursor pointer
+  opacity 0
+  width 0
+  overflow hidden
+  display inline-block
+  transition .2s
+  &.expose
+    width 2.4rem
     opacity 0.7
-    margin-left 0.4rem
-  .icon
-    padding-left 0.4rem
-    font-size 2rem
-    line-height 3rem
-    cursor pointer
-    opacity 0
-    width 0
-    overflow hidden
-    display inline-block
-    transition .2s
-    vertical-align -1.0rem
-    &.expose
-      width 2.4rem
-      opacity 0.7
+    overflow visible
 
 .has-mouse .fileinfo
   .icon
     width auto
+    overflow visible
   &:hover .icon
     opacity 0.7
-    
-.fileinfo::after
-  content ''
-  display block
-  clear both
 </style>

@@ -60,6 +60,7 @@ export default
   upload_uploading: '暗号化してアップロードしています...'
   upload_max_dl: '最大ダウンロード回数'
   upload_period: '有効期限'
+  upload_files: '#{count} ファイル'
 
   uploadform_tip_max_dl:
     'セキュリティのため、可能な限り少ない回数を指定してください。'
