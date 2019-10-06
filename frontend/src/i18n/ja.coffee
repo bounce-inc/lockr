@@ -60,8 +60,6 @@ export default
   upload_uploading: '暗号化してアップロードしています...'
   upload_max_dl: '最大ダウンロード回数'
   upload_period: '有効期限'
-  upload_quota_exceed: 'あなたは#{quota}の割り当て中すでに#{usage}を' +
-    '使用しています。このサイズのファイルをアップロードすることはできません。'
 
   uploadform_tip_max_dl:
     'セキュリティのため、可能な限り少ない回数を指定してください。'
@@ -133,3 +131,7 @@ export default
       '一度にアップロードできるのは100ファイルまでです。'
   error_login_title: 'ログインできません'
   error_login_detail: 'ユーザIDまたはパスワードが違います。'
+  error_quota_title: '容量オーバー'
+  error_quota_detail:
+    'このサイズのファイルをアップロードすることはできません。' +
+    'あなたは#{quota}の容量中#{usage}を使用中です。'

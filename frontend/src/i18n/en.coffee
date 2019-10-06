@@ -61,9 +61,6 @@ export default
   upload_uploading: 'Encrypting and uploading...'
   upload_max_dl: 'Maximum downloads'
   upload_period: 'Available for'
-  upload_quota_exceed: '''
-    You are already using #{usage} out of your quota #{quota}.
-    You can't upload a file of this size.'''
 
   uploadform_tip_max_dl:
     'For security, select the smallest possible number.'
@@ -136,3 +133,6 @@ export default
   error_upload_too_many_detail: 'You can upload up to 100 files at once.'
   error_login_title: 'Login failed'
   error_login_detail: 'Wrong username (email) or password.'
+  error_quota_title: 'Quota exceeded'
+  error_quota_detail: '''You can't upload files of this size.
+    You are using #{usage} out of your quota #{quota}. '''

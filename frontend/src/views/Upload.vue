@@ -1,13 +1,12 @@
 <template lang="pug">
 .container
-  TransitionGroup(tag="div")
-    FileInfo.file-info(
-      v-for="file in files"
-      :key="file.name"
-      :file="file"
-      :removable="status === 'form'"
-      @remove="remove_file(file)"
-    )
+  FileInfo.file-info(
+    v-for="file in files"
+    :key="file.name"
+    :file="file"
+    :removable="status === 'form'"
+    @remove="remove_file(file)"
+  )
   .add-file(v-if="status === 'form'")
     FileChooser(v-slot="{ open }" @file-chosen="add_file")
       Button(@click="open")
@@ -25,12 +24,6 @@
           FolderIcon
           | 
           | {{ t('home_btn_choose_file') }}
-
-    .quota(v-if="status == 'quota'")
-      | {{ t('upload_quota_exceed', human_quota) }}
-      ActionBar
-        template(v-slot:left)
-          CancelButton(@click="init")
 
     UploadForm(
       v-if="status == 'form'"
@@ -68,7 +61,7 @@ import notification from '../notification'
 import secrets from '../secrets'
 import { human_readable_size } from '../ui-util'
 import { is_mobile } from '../util'
-import { show_error } from '../error'
+import { AppError, show_error } from '../error'
 import { t } from '../i18n'
 
 export default
@@ -124,6 +117,8 @@ export default
         show_error new Error 'upload_too_many'
         return
 
+      orig_files = [@files...]
+
       for file in files
         found = false
         for f in @files
@@ -137,14 +132,10 @@ export default
         unless @upload_spec
           @status = 'query'
           @upload_spec = await api 'GET', '/uploads/info'
-        if @check_quota()
-          @status = 'form'
-        else
-          @status = 'quota'
+        @check_quota()
+        @status = 'form'
       catch e
-        console.error e
-        show_error e
-        @init()
+        show_error e, => @files = orig_files
 
     remove_file: (file) ->
       i = @files.indexOf file
@@ -156,7 +147,8 @@ export default
       remain = @upload_spec.quota - @upload_spec.usage
       size = 0
       size += file.size for file in @files
-      size < remain
+      if size > remain
+        throw new AppError 'quota', @human_quota
 
     submit: (data) ->
       try
@@ -202,11 +194,6 @@ export default
     flex-grow 1
 .upload-info
   margin 1.6rem 0
-
-.v-enter, .v-leave-to
-  opacity 0
-.v-leave-active, .v-enter-active
-  transition .2s
 
 @media (max-width 640px)
   .chooser-box

@@ -7,7 +7,11 @@ export error_status =
   maintenance: false
   clear: ->
     @title = @detail = ''
-    @onclse = null
+    @onclose = null
+
+export class AppError extends Error
+  constructor: (message, @params) ->
+    super message
 
 export show_error = (e, onclose) ->
   if e.message == 'maintenance'
@@ -18,7 +22,7 @@ export show_error = (e, onclose) ->
   detail = ''
 
   if title
-    detail = t("error_#{e.message}_detail")
+    detail = t("error_#{e.message}_detail", e.params or {})
   else if e.status
     title = "#{t 'error_server'} #{e.status}"
     detail = e.message
