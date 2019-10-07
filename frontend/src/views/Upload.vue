@@ -103,8 +103,9 @@ export default
 
     zip_info: ->
       zip = new Zip @files
+      len = zip.length()
       name: t 'upload_files', count: @files.length
-      size: zip.length()
+      size: len
 
   mounted: -> if @f then @add_file @f
 
@@ -122,7 +123,7 @@ export default
         show_error new Error 'upload_too_many'
         return
 
-      orig_files = @files.slice 0
+      new_files = @files.slice 0
 
       for file in files
         found = false
@@ -131,18 +132,20 @@ export default
             found = true
             break
         unless found
-          @files.push file
+          new_files.push file
 
       try
         unless @upload_spec
           @status = 'query'
           @upload_spec = await api 'GET', '/uploads/info'
-        @check_quota()
+        @check_quota(new_files)
+        if new_files.length > 1
+          new Zip new_files # check zippable
         @status = 'form'
+        @files = new_files
       catch e
         @status = 'file' if @status = 'query'
         show_error e, =>
-          @files = orig_files
           @status =
             if @files.length
               'form'
@@ -155,10 +158,10 @@ export default
       if @files.length == 0
         @status = 'file'
 
-    check_quota: ->
+    check_quota: (files) ->
       remain = @upload_spec.quota - @upload_spec.usage
       size = 0
-      size += file.size for file in @files
+      size += file.size for file in files
       if size > remain
         throw new AppError 'quota', @human_quota
 
