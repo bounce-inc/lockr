@@ -1,9 +1,10 @@
 import Crypto from './crypto'
-import api from './api'
-import { sleep, has_service_worker, ws_url } from './util'
 import Hmac from './hmac'
-import { b64encode } from './encode'
+import api from './api'
 import decrypt from './decrypt'
+import { b64encode } from './encode'
+import { event } from './ga'
+import { sleep, has_service_worker, ws_url } from './util'
 
 save_url = (url, filename) ->
   a = document.createElement 'a'
@@ -67,6 +68,7 @@ class DownloadBlob extends Download
       signature: @signature
 
     try
+      event 'download', 'start', @meta.size
       array =
         loop
           data = await @queue.read()
@@ -82,7 +84,9 @@ class DownloadBlob extends Download
         url = URL.createObjectURL blob
         save_url url, @meta.name
         setTimeout (-> URL.revokeObjectURL url), 60*1000
+      event 'download', 'complete', @meta.size
     catch e
+      event 'download', 'error', @meta.size
       unless e.message == 'CANCEL'
         @cancel()
         throw e
@@ -92,6 +96,8 @@ class DownloadBlob extends Download
 class DownloadStream extends Download
   download: (onprogress) ->
     try
+      event 'download', 'start', @meta.size
+
       unless navigator.serviceWorker.controller
         console.log 'awaiting sw activation'
         await navigator.serviceWorker.ready
@@ -137,7 +143,9 @@ class DownloadStream extends Download
             else
               reject new Error "Unknown notification #{type}"
       clearInterval @ping
+      event 'download', 'complete', @meta.size
     catch e
+      event 'download', 'error', @meta.size
       @cancel()
       throw e
 

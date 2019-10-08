@@ -6,6 +6,7 @@ import api, { set_api_host, reset_api_host, get_ws_prefix } from './api'
 import { b64encode, join_bytes } from './encode'
 import { sleep } from './util'
 import { file_reader, block_aligner } from './queue'
+import { event } from './ga'
 
 export default class Upload
   @create: (files, args...) ->
@@ -27,6 +28,8 @@ export default class Upload
     blocks = Math.ceil(@total_size / @block_size)
     paddings = blocks * 16
     enc_size = Math.floor((@total_size + paddings) / 16) * 16
+
+    event 'upload', 'start', @total_size
 
     res = await api 'PUT', "/uploads/#{@id}", json:
       enc_size: enc_size
@@ -55,7 +58,13 @@ export default class Upload
       return if @canceled
 
       await @finish()
+
+      event 'upload', 'complete', @total_size
+
       @crypto.get_b64secret()
+    catch e
+      event 'upload', 'error', @total_size
+      throw e
     finally
       reset_api_host()
 
