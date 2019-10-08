@@ -10,14 +10,13 @@ Lockr encrypts the file in the sender's browser with AES-256 before sending it t
 
 > In addition to the contents of the file, metadata such as the file name is also subject to encryption. The only thing we can know is the approximate file size.
  
-
 ## Double encryption
 
 Data encrypted on the client side is encrypted again on the server side with AES-256. The encryption key is generated for each upload and discarded when the file is deleted. For this reason, once a file is deleted, the original data cannot be retrieved even if the deleted file can be restored.
 
 ## 5GB for free
 
-Up to 5GB can be used per user.
+Storage capacity up to 5GB per user can be used free of charge.
  
 ## Broad browser support
 
