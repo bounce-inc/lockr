@@ -2,6 +2,20 @@
 
 cd $(dirname $0)
 
+notify() {
+    local url=slack-webhook-url
+    local text="$1"
+    if [ -f $url ]; then
+        curl -s -X POST -H 'Content-type: application/json' \
+          --data "{\"text\":\"$text\"}" $(cat $url)
+    fi
+}
+
+REF=$(git rev-parse --abbrev-ref HEAD)
+REV=$(git rev-parse --short HEAD)
+
+trap "notify \"DEPLOY $REV ($REF) FAILED\"" ERR
+
 git fetch
 git reset --hard origin/${1:-master}
 
@@ -26,16 +40,28 @@ rsync -a --exclude='*.html' --exclude='*.html.gz' build/. $NEWDIST
 echo $(git rev-parse --short HEAD)-nohtml > $NEWDIST/.rev
 
 echo "Switching dist to $NEWDIST"
-old=$(readlink dist)
+if [ -L dist ]; then
+    old=$(readlink dist)
+fi
 ln -sfT $NEWDIST dist
 
-echo "Removing $old"
-rm -rf $old
+if [ -d "$old" ]; then
+    echo "Removing $old"
+    rm -rf $old
+fi
 
-echo "Waiting for new assets to sync"
-sleep 60
+if [ "$2" != "skip" ]; then
+    echo "Waiting for new assets to sync"
+    sleep 60
+fi
 
 echo "Copying new HTMLs to $NEWDIST"
 rsync -a build/. $NEWDIST
 git rev-parse --short HEAD > $NEWDIST/.rev
-echo "Done, but wait another minute for the new HTMLs to sync"
+if [ "$2" != "skip" ]; then
+    echo "Waiting another minute for the new HTMLs to sync"
+    sleep 60
+fi
+echo Done
+
+notify "Deploy $REV ($REF) succeeded"
