@@ -83,9 +83,12 @@ footer
   display flex
   justify-content space-between
   align-items center
+  .share
+    display flex
+    align-items center
   .icon
     font-size 2rem
-    margin-right 0.4rem
+    margin-left 0.4rem
   .copyright .copy
     font-family Helvetica, Arial, san-serif
   a
