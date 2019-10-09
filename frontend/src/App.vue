@@ -62,8 +62,8 @@ html
   overflow-wrap break-word
   -webkit-overflow-scrolling touch
   &[lang="ja"]
-    font-family 'Hiragino Kaku Gothic Pro', 'Yu Gothic Medium', Meiryo,
-      sans-serif
+    font-family 'Hiragino Sans', 'Hiragino Kaku Gothic Pro', 'Yu Gothic Medium',
+      Meiryo, sans-serif
   height 100%
 
 body
