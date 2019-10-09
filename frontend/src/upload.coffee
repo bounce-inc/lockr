@@ -27,12 +27,12 @@ export default class Upload
     @total_size = @get_size()
     blocks = Math.ceil(@total_size / @block_size)
     paddings = blocks * 16
-    enc_size = Math.floor((@total_size + paddings) / 16) * 16
+    @enc_size = Math.floor((@total_size + paddings) / 16) * 16
 
-    event 'upload', 'start', @total_size
+    event 'upload', 'start', @enc_size
 
     res = await api 'PUT', "/uploads/#{@id}", json:
-      enc_size: enc_size
+      enc_size: @enc_size
       has_password: !! @info.password
       max_downloads: @info.count
       period: @info.period
@@ -59,11 +59,11 @@ export default class Upload
 
       await @finish()
 
-      event 'upload', 'complete', @total_size
+      event 'upload', 'complete', @enc_size
 
       @crypto.get_b64secret()
     catch e
-      event 'upload', 'error', @total_size
+      event 'upload', 'error', @enc_size
       throw e
     finally
       reset_api_host()

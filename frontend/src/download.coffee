@@ -48,6 +48,7 @@ export default class Download
     @signature = res.signature
     @block_size = res.block_size
     @token = res.token
+    @enc_size = res.enc_size
 
     @meta = await @crypto.decrypt_metadata res.metadata
 
@@ -68,7 +69,7 @@ class DownloadBlob extends Download
       signature: @signature
 
     try
-      event 'download', 'start', @meta.size
+      event 'download', 'start', @enc_size
       array =
         loop
           data = await @queue.read()
@@ -84,9 +85,9 @@ class DownloadBlob extends Download
         url = URL.createObjectURL blob
         save_url url, @meta.name
         setTimeout (-> URL.revokeObjectURL url), 60*1000
-      event 'download', 'complete', @meta.size
+      event 'download', 'complete', @enc_size
     catch e
-      event 'download', 'error', @meta.size
+      event 'download', 'error', @enc_size
       unless e.message == 'CANCEL'
         @cancel()
         throw e
@@ -96,11 +97,7 @@ class DownloadBlob extends Download
 class DownloadStream extends Download
   download: (onprogress) ->
     try
-      event 'download', 'start', @meta.size
-
-      unless navigator.serviceWorker.controller
-        console.log 'awaiting sw activation'
-        await navigator.serviceWorker.ready
+      event 'download', 'start', @enc_size
 
       params =
         id: @id
@@ -143,13 +140,17 @@ class DownloadStream extends Download
             else
               reject new Error "Unknown notification #{type}"
       clearInterval @ping
-      event 'download', 'complete', @meta.size
+      event 'download', 'complete', @enc_size
     catch e
-      event 'download', 'error', @meta.size
+      event 'download', 'error', @enc_size
       @cancel()
       throw e
 
   send_sw: (command, id, param, port) ->
+    unless navigator.serviceWorker.controller
+      console.log 'awaiting sw activation'
+      await navigator.serviceWorker.ready
+
     new Promise (resolve, reject) ->
       chan = new MessageChannel
       chan.port1.onmessage = (ev) ->
