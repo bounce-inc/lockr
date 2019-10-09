@@ -1,18 +1,21 @@
 <template lang="pug">
 transition(appear)
   .notice(v-if="show")
-    p(v-html="t('cookie_notice')")
+    p
+      CookieIcon
+      span(v-html="t('cookie_notice')")
     Button.button(@click="close") OK
 </template>
 
 <script lang="coffee">
 import Button from './Button'
+import CookieIcon from 'vue-material-design-icons/Cookie'
 import { t } from '../i18n'
 
 KEY = 'lockr_agreement'
 
 export default
-  components: { Button }
+  components: { Button, CookieIcon }
   data: ->
     show: false
   methods:
