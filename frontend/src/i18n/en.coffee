@@ -75,9 +75,8 @@ export default
   uploadedfile_copy: 'Copy to Clipboard'
   uploadedfile_copied: 'Copied!'
   uploadedfile_noinfo_title: 'Details Unknown'
-  uploadedfile_noinfo_desc: '''
-    This browser cannot display file details because it has no decryption
-    key for this upload.'''
+  uploadedfile_noinfo_desc:
+    'This browser does not have file details of this upload.'
   uploadedfile_remaining_time: 'Remaining time'
   uploadedfile_dl_max: 'Maximum downloads'
   uploadedfile_dl_success: 'Successful downloads'

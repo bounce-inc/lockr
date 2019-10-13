@@ -1,9 +1,10 @@
 <template lang="pug">
 .container
   FileInfo(v-if="meta" :file="meta" :zip="!!meta.manifest")
-  .noinfo(v-if="!secret")
+  .noinfo(v-else)
     .title
       QuestionIcon
+      | 
       | {{ t('uploadedfile_noinfo_title') }}
     .desc {{ t('uploadedfile_noinfo_desc') }}
   FileList(v-if="meta && meta.manifest" :files="meta.manifest")
@@ -87,9 +88,10 @@ import QuestionIcon from 'vue-material-design-icons/FileQuestion'
 import Spinner from '../components/Spinner'
 import api from '../api'
 import clipboard_copy from 'clipboard-copy'
+import i18n, { t } from '../i18n'
+import metadata from '../metadata'
 import { human_readable_time } from '../ui-util'
 import { show_error } from '../error'
-import i18n, { t } from '../i18n'
 
 export default
   components: {
@@ -142,12 +144,9 @@ export default
         @info = await api 'GET', "/uploads/#{@id}"
       catch e
         show_error e, => @$router.push '/'
-      return unless @secret
-      crypto = new Crypto
-      await crypto.init @secret
-      crypto.set_salt @info.salt
-      @meta = await crypto.decrypt_metadata @info.metadata
-      @meta.lastModified = @meta.last_modified
+      meta = metadata.get @id
+      if meta
+        @meta = { meta..., lastModified: meta.last_modified }
 
     update_info: ->
       @info = await api 'GET', "/uploads/#{@id}"

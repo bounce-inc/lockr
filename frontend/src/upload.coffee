@@ -123,11 +123,11 @@ export default class Upload
       throw new Error "Server error: #{data}"
 
   finish: ->
-    meta = await @crypto.encrypt_metadata @create_meta()
+    @meta = @create_meta()
 
     api 'PUT', "/uploads/#{@id}/complete", json:
       token: @token
-      metadata: meta
+      metadata: await @crypto.encrypt_metadata @meta
       auth_key: await @crypto.get_b64_auth_key()
       signature: b64encode @hmac.finish().result
 

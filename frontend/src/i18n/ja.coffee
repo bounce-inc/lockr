@@ -74,7 +74,7 @@ export default
   uploadedfile_copied: 'コピーしました'
   uploadedfile_noinfo_title: '詳細不明'
   uploadedfile_noinfo_desc: 'このブラウザにはこのアップロードに対応する' +
-    '暗号鍵がないため、詳細を表示できません。'
+    '詳細情報がないので表示できません。'
   uploadedfile_remaining_time: '残り時間'
   uploadedfile_dl_max: '最大ダウンロード'
   uploadedfile_dl_success: 'ダウンロード完了'
