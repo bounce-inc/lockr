@@ -9,7 +9,9 @@ export default do ->
     else
       {}
 
-  get: (id) -> metadata[id][0]
+  get: (id) ->
+    d = metadata[id]
+    d and d[0]
 
   set: (id, data) ->
     while Object.keys(metadata).length >= MAX
