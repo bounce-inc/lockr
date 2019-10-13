@@ -20,24 +20,34 @@
     span(v-if="info.reason == 'banned'")
       | {{ t('app_deleted_banned') }}
 
-  ActiveBox.box(v-if="info && info.status != 'deleted'")
-    div(v-if="secret")
-      .label
-        LinkIcon
-        | 
-        | {{ t('uploadedfile_label_link') }}:
-      .link(@click="select_url") {{ url }}
+  ActiveBox.box(v-if="secret && info && info.status != 'deleted'")
+    .label
+      LinkIcon
+      | 
+      | {{ t('uploadedfile_label_link') }}:
+    .link(@click="select_url") {{ url }}
+    .notice
+      AlertIcon
+      | {{ t('uploadedfile_link_notice') }}
+
     ActionBar
       template(v-slot:left)
         Button(@click="remove" v-if="!deleting")
           DeleteIcon
           | {{ t('app_delete') }}
         Spinner(v-else)
-      Button(v-if="secret" @click="copy" :primary="!copied")
+      Button(@click="copy" :primary="!copied")
         CopyIcon(v-if="!copied")
         | 
         span(v-if="copied") {{ t('uploadedfile_copied') }}
         span(v-else) {{ t('uploadedfile_copy') }}
+
+  .box.delete-only(v-if="!secret && info && info.status != 'deleted'")
+    Button(@click="remove" v-if="!deleting")
+      DeleteIcon
+      | {{ t('app_delete') }}
+    Spinner(v-else)
+
 
   .info(v-if="info")
     .counts
@@ -62,6 +72,7 @@
 <script lang="coffee">
 import ActionBar from '../components/ActionBar'
 import ActiveBox from '../components/ActiveBox'
+import AlertIcon from 'vue-material-design-icons/AlertCircle'
 import Button from '../components/Button'
 import CheckIcon from 'vue-material-design-icons/CheckCircleOutline'
 import CopyIcon from 'vue-material-design-icons/ContentCopy'
@@ -76,7 +87,6 @@ import QuestionIcon from 'vue-material-design-icons/FileQuestion'
 import Spinner from '../components/Spinner'
 import api from '../api'
 import clipboard_copy from 'clipboard-copy'
-import secrets from '../secrets'
 import { human_readable_time } from '../ui-util'
 import { show_error } from '../error'
 import i18n, { t } from '../i18n'
@@ -85,6 +95,7 @@ export default
   components: {
     ActionBar
     ActiveBox
+    AlertIcon
     Button
     CheckIcon
     CopyIcon
@@ -102,9 +113,11 @@ export default
     id:
       type: String
       required: true
+    secret:
+      type: String
+      default: null
 
   data: ->
-    secret: null
     info: null
     meta: null
     copied: false
@@ -129,6 +142,7 @@ export default
         @info = await api 'GET', "/uploads/#{@id}"
       catch e
         show_error e, => @$router.push '/'
+      return unless @secret
       crypto = new Crypto
       await crypto.init @secret
       crypto.set_salt @info.salt
@@ -163,7 +177,6 @@ export default
       setTimeout (=> @copied = false), 1000
 
   created: ->
-    @secret = secrets.get @id
     @get_file_info()
     @interval = setInterval @update_info, 10 * 1000
 
@@ -186,6 +199,10 @@ export default
     font-weight bold
 .box
   margin 2rem 0
+  .notice
+    margin-top 0.8rem
+    opacity 0.7
+    font-size 1.4rem
 .status
   font-weight bold
   margin-top 2rem

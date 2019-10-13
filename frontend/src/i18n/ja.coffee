@@ -82,6 +82,8 @@ export default
   uploadedfile_dl_progress: 'ダウンロード中'
   uploadedfile_confirm_delete: 'ファイルをサーバーから削除してよろしいですか?'
   uploadedfile_more: '他のファイルをアップロードする'
+  uploadedfile_link_notice:
+    'このページを離れるとこのURLは見られなくなります。必ずコピーしてください。'
 
   filelist_more: '他#{count}ファイル'
   filelist_less: '少なく表示'

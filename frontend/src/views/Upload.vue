@@ -58,7 +58,6 @@ import UploadInfo from '../components/UploadInfo'
 import Zip from '../zip'
 import api from '../api'
 import notification from '../notification'
-import secrets from '../secrets'
 import { human_readable_size } from '../ui-util'
 import { is_mobile } from '../util'
 import { AppError, show_error } from '../error'
@@ -180,8 +179,9 @@ export default
         return unless secret
         notification t('notification_upload'), @files[0].name
         expires = Date.now() + (@upload_info.period + 90*24*60*60) * 1000
-        secrets.add @upload.id, secret, expires
-        @$router.push name: 'uploaded_file', params: id: @upload.id
+        @$router.push name: 'uploaded_file', params:
+          id: @upload.id
+          secret: secret
       catch e
         console.error e
         show_error e

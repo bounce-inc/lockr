@@ -86,6 +86,8 @@ export default
   uploadedfile_confirm_delete:
     'Are you sure to delete this file from the server?'
   uploadedfile_more: 'Upload another file'
+  uploadedfile_link_notice: '''This is your last chance to see this link.
+    Be sure to copy it before leaving this page.'''
 
   filelist_more: '#{count|more file|more files}'
   filelist_less: 'Show less'
