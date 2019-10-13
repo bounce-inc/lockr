@@ -12,7 +12,7 @@ export default class QueuedWebSocket
       @ws.onmessage = (ev) => @queue.write ev.data
 
       @ws.onclose = (ev) =>
-        e = new Error 'connection'
+        e = new Error 'wsclose'
         @queue.error e
         reject e
 

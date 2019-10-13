@@ -86,7 +86,7 @@ import LinkIcon from 'vue-material-design-icons/Link'
 import ProgressIcon from 'vue-material-design-icons/ProgressDownload'
 import QuestionIcon from 'vue-material-design-icons/FileQuestion'
 import Spinner from '../components/Spinner'
-import api from '../api'
+import api, { set_api_host, get_ws_prefix } from '../api'
 import clipboard_copy from 'clipboard-copy'
 import i18n, { t } from '../i18n'
 import metadata from '../metadata'
@@ -124,34 +124,37 @@ export default
     meta: null
     copied: false
     deleting: false
+    ws: null
+    expires_at: null
+    remaining_time: null
 
   computed:
     url: ->
       hosturl = location.href.split('/').slice(0, 3).join('/')
       "#{hosturl}/#{i18n.lang}/d##{@secret}"
 
-    remaining_time: ->
-      return null if @info.status == 'deleted'
-      seconds = @info.expires_at - Date.now() / 1000
-      return null if seconds <= 0
-      human_readable_time seconds
-
   methods:
     t: t
 
     get_file_info: ->
-      try
-        @info = await api 'GET', "/uploads/#{@id}"
-      catch e
-        show_error e, => @$router.push '/'
       meta = metadata.get @id
       if meta
         @meta = { meta..., lastModified: meta.last_modified }
 
-    update_info: ->
-      @info = await api 'GET', "/uploads/#{@id}"
-      if @info.status == 'deleted'
-        clearInterval @interval
+      try
+        res = await api 'POST', "/watches/#{@id}"
+      catch e
+        show_error e, => @$router.push '/'
+        return
+
+      @info = res.status
+
+      set_api_host res.host
+      @ws = new WebSocket "#{get_ws_prefix()}/watch"
+      @ws.onmessage = (ev) => @info = JSON.parse ev.data
+      @ws.onclose = => show_error new Error 'wsclose' unless @exitting
+      @ws.onerror = => show_error new Error 'websocket'
+      @ws.onopen = => @ws.send res.token
 
     remove: ->
       return unless confirm t 'uploadedfile_confirm_delete'
@@ -161,7 +164,6 @@ export default
       catch e
         @deleting = false
         show_error e
-      @update_info()
 
     select_url: (ev) ->
       range = document.createRange()
@@ -175,12 +177,30 @@ export default
       @copied = true
       setTimeout (=> @copied = false), 1000
 
+    update_time: ->
+      @remaining_time = null
+      return unless @info
+      return if @info.status == 'deleted'
+      seconds = @expires_at - Date.now() / 1000
+      if seconds <= 0
+        @info.status = 'deleted'
+        @info.reason = 'expired'
+        return
+      @remaining_time = human_readable_time seconds
+
+  watch:
+    info: ->
+      @expires_at = Date.now() / 1000 + @info.expires_in
+      @update_time()
+
   created: ->
     @get_file_info()
-    @interval = setInterval @update_info, 10 * 1000
+    @timer = setInterval @update_time, 1000
 
   beforeDestroy: ->
-    clearInterval @interval
+    clearInterval @timer
+    @exitting = true
+    @ws.close()
 </script>
 
 <style scoped lang="stylus">

@@ -126,6 +126,8 @@ export default
     'ファイルが転送中に書き換えられたか、破損した可能性があります。'
   error_websocket_title: 'WebSocketエラー'
   error_websocket_detail: 'WebSocketの接続にエラーが発生しました。'
+  error_wsclose_title: 'ネットワークエラー'
+  error_wsclose_detail: 'コネクションが切断されました。'
   error_fileread_title: 'ファイルが読めません'
   error_zip_file_too_large_title: 'ファイルがZIPにできません'
   error_zip_file_too_large_detail: '4GB以上のファイルはZIPに含めることが' +

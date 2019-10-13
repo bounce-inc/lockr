@@ -128,6 +128,8 @@ export default
     'The file may have been modified or corrupted during transfer.'
   error_websocket_title: 'WebSocket error'
   error_websocket_detail: 'WebSocket connection error.'
+  error_wsclose_title: 'Network error'
+  error_wsclose_detail: 'Connection closed.'
   error_fileread_title: 'File is not readable'
   error_zip_file_too_large_title: 'File is too large to zip'
   error_zip_file_too_large_detail: '''Files over 4GB cannnot be included in a
