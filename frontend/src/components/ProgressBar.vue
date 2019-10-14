@@ -1,7 +1,7 @@
 <template lang="pug">
 .wrapper
   .bar
-    .inner(:style="{ width: progress * 100 + '%' }")
+    .inner(:style="{ width: rounded_progress * 100 + '%' }")
   .estimate
     .span(v-if="estimation") {{ t('app_progress', { time: estimation_human }) }}
     .span(v-else) &nbsp;
@@ -22,8 +22,8 @@ export default
     start_time: 0
     orig_title: document.title
   computed:
-    estimation_human: ->
-      human_readable_time @estimation / 1000
+    rounded_progress: -> Math.round(@progress * 1600) / 1600
+    estimation_human: -> human_readable_time @estimation / 1000
     percentile: -> Math.min 100, Math.round(100 * @progress)
   mounted: ->
     @start_time = Date.now()
