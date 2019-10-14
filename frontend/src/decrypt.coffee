@@ -32,7 +32,7 @@ export default (params) ->
         hmac.process dec_data
         progress += dec_data.length
         now = Date.now()
-        if now >= last_progress + 100
+        if now >= last_progress + 33
           last_progress = now
           params.onprogress 'download', progress / params.meta.size
         block_num++

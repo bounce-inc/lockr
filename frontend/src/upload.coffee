@@ -69,7 +69,7 @@ export default class Upload
       reset_api_host()
 
   send_body: (ws) ->
-    last_report = Date.now()
+    last_progress = last_report = Date.now()
     size = 0
     block_num = 0
     buffered = 0
@@ -84,7 +84,10 @@ export default class Upload
         if msg == 'ACK'
           buffered--
           progress += @block_size
-          @onprogress 'upload', progress / @total_size
+          now = Date.now()
+          if now >= last_progress + 33
+            last_progress = now
+            @onprogress 'upload', progress / @total_size
         else
           throw new Error "Server error: #{msg}"
       data = await @read_queue.read()
