@@ -10,6 +10,7 @@ export default (params) ->
     try
       block_num = 0
       progress = 0
+      last_progress = Date.now()
       res = await api 'PUT', "/downloads/#{params.id}/start", json:
         token: params.token
       token = res.token
@@ -30,7 +31,10 @@ export default (params) ->
         await queue.write dec_data
         hmac.process dec_data
         progress += dec_data.length
-        params.onprogress 'download', progress / params.meta.size
+        now = Date.now()
+        if now >= last_progress + 100
+          last_progress = now
+          params.onprogress 'download', progress / params.meta.size
         block_num++
       sig = b64encode hmac.finish().result
       if sig != params.signature
