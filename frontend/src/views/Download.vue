@@ -131,8 +131,8 @@ export default
       qrcode
         content: location.href
         padding: 4
-        width: 128
-        height: 128
+        width: 180
+        height: 180
 
   mounted: ->
     @start()
