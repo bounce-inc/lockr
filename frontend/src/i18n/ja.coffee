@@ -83,7 +83,7 @@ export default
   uploadedfile_confirm_delete: 'ファイルをサーバーから削除してよろしいですか?'
   uploadedfile_more: '他のファイルをアップロードする'
   uploadedfile_link_notice:
-    'このページを離れるとこのURLは見られなくなります。必ずコピーしてください。'
+    'このURLは一度だけ表示されます。ページを離れる前にコピーしてください。'
 
   filelist_more: '他#{count}ファイル'
   filelist_less: '少なく表示'
