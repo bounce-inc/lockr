@@ -63,18 +63,16 @@ export default
 .active-box
   margin-bottom 1.6rem
 .chooser-box
-  display flex
-  align-items flex-end
   .instruction
     flex-grow 1
-[lang="en"]
-  .instruction
-    font-size 2.0rem
+    font-size 1.8rem
 .btn-bar
   margin-top 0.8rem
   text-align right
+
 @media (max-width 640px)
   .chooser-box
+    display flex
     flex-direction column
     align-items center
 </style>
