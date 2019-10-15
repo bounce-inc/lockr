@@ -25,9 +25,13 @@
       ErrorIcon.icon
       | {{ t('download_wrong_password') }}
 
-    .mobile(v-if="!is_mobile")
-      .qr(v-html="qr")
-      p {{ t('download_qr') }}
+    .qr-box
+      QRIcon.qr-btn(
+        :title="t('download_qr')"
+        v-if="!is_mobile && !show_qr"
+        @click="show_qr = true"
+      )
+      .qr(v-if="show_qr" v-html="qr")
 
   .error-frame(v-if="status == 'error'")
     span(v-if="error == 'downloads'")
@@ -74,6 +78,7 @@ import FileList from '../components/FileList'
 import GlobalEvents from 'vue-global-events'
 import NotificationRequest from '../components/NotificationRequest'
 import ProgressBar from '../components/ProgressBar'
+import QRIcon from 'vue-material-design-icons/Qrcode'
 import Spinner from '../components/Spinner'
 import TextBox from '../components/TextBox'
 import notification from '../notification'
@@ -93,6 +98,7 @@ export default
     GlobalEvents
     NotificationRequest
     ProgressBar
+    QRIcon
     Spinner
     TextBox
   }
@@ -106,6 +112,7 @@ export default
     status: 'query'
     wrong_password: false
     is_mobile: is_mobile
+    show_qr: false
 
   computed:
     large_file: ->
@@ -229,9 +236,11 @@ form
   text-align center
   margin-top 2rem
 
-.mobile
+.qr-box
+  text-align center
   margin 3.2rem 0
-  p
-    font-size 1.4rem
-    opacity 0.7
+
+.qr-btn
+  font-size 2rem
+  cursor pointer
 </style>

@@ -107,7 +107,7 @@ export default
   download_win_warn: '''If some of the file names are garbled, use
     <a href="https://www.7-zip.org/" target="_blank" rel="noopener">7-Zip</a>
     or other unarchivers.'''
-  download_qr: 'Download to mobile'
+  download_qr: 'Show QR code'
 
   notification_description:
     'You can receive a desktop notification when the transfer completes.'
