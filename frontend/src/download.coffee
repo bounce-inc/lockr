@@ -84,7 +84,7 @@ class DownloadBlob extends Download
       else
         url = URL.createObjectURL blob
         save_url url, @meta.name
-        setTimeout (-> URL.revokeObjectURL url), 60*1000
+        #setTimeout (-> URL.revokeObjectURL url), 60*1000
       event 'download', 'complete', @enc_size
     catch e
       event 'download', 'error', @enc_size
