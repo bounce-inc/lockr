@@ -57,6 +57,9 @@ export default class Download
     type: @meta.type
     lastModified: @meta.last_modified
     manifest: @meta.manifest
+    max_downloads: res.max_downloads
+    downloads: res.downloads
+    expires_in: res.expires_in
 
 class DownloadBlob extends Download
   download: (onprogress) ->

@@ -106,6 +106,7 @@ export default
     ' target="_blank" rel="noopener">7-Zip</a> ' +
     '等をお使いください。'
   download_qr: 'QRコードを表示'
+  download_expiry: 'あと#{count}回のダウンロードまたは#{time}後に消去されます。'
 
   notification_description:
     '転送完了時にデスクトップ通知を受け取ることができます。'

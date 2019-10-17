@@ -6,6 +6,11 @@
     :zip="!!file_info.manifest"
   )
   FileList(v-if="file_info && file_info.manifest" :files="file_info.manifest")
+  .expiration-info(v-if="file_info")
+    | {{ t('download_expiry', {
+    |   count: file_info.max_downloads - file_info.downloads,
+    |   time: human_readable_expiration
+    | }) }}
 
   .error-frame(v-if="large_file") {{ t('download_large_file_warn') }}
 
@@ -84,6 +89,7 @@ import TextBox from '../components/TextBox'
 import notification from '../notification'
 import qrcode from 'pure-svg-code/qrcode'
 import { has_service_worker, is_mobile } from '../util'
+import { human_readable_time } from '../ui-util'
 import { show_error } from '../error'
 import { t } from '../i18n'
 
@@ -133,6 +139,8 @@ export default
         padding: 4
         width: 180
         height: 180
+    human_readable_expiration: ->
+      human_readable_time @file_info.expires_in
 
   mounted: ->
     @start()
@@ -209,6 +217,9 @@ export default
 </script>
 
 <style scoped lang="stylus">
+.expiration-info
+  margin 1.6rem 0
+  text-align center
 form
   margin 2rem 0
   text-align center
