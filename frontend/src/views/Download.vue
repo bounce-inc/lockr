@@ -10,9 +10,9 @@
   .error-frame(v-if="large_file") {{ t('download_large_file_warn') }}
 
   form(v-if="status == 'form'" @submit.prevent="submit")
-    .expiration-info(v-if="file_info")
+    .expiration-info(v-if="expiry")
       | {{ t('download_expiry', {
-      |   count: file_info.max_downloads - file_info.downloads,
+      |   count: expiry.max_downloads - expiry.downloads,
       |   time: human_readable_expiration
       | }) }}
     span(v-if="has_password")
@@ -112,6 +112,7 @@ export default
   data: ->
     error: null
     file_info: null
+    expiry: null
     has_password: false
     password: ''
     progress: 0
@@ -140,7 +141,7 @@ export default
         width: 180
         height: 180
     human_readable_expiration: ->
-      human_readable_time @file_info.expires_in
+      human_readable_time @expiry.expires_in
 
   mounted: ->
     @start()
@@ -175,6 +176,7 @@ export default
           @has_password = true
         else
           @file_info = info
+        @expiry = @download.expiry
         @status = 'form'
       catch e
         console.error e

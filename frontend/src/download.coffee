@@ -35,6 +35,10 @@ export default class Download
       @has_password = res.has_password
       @crypto.set_salt res.salt
       @salt = res.salt
+      @expiry =
+        max_downloads: res.max_downloads
+        downloads: res.downloads
+        expires_in: res.expires_in
 
     if @has_password
       return has_password: true unless password
@@ -57,9 +61,6 @@ export default class Download
     type: @meta.type
     lastModified: @meta.last_modified
     manifest: @meta.manifest
-    max_downloads: res.max_downloads
-    downloads: res.downloads
-    expires_in: res.expires_in
 
 class DownloadBlob extends Download
   download: (onprogress) ->
