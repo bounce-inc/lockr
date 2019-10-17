@@ -6,15 +6,15 @@
     :zip="!!file_info.manifest"
   )
   FileList(v-if="file_info && file_info.manifest" :files="file_info.manifest")
-  .expiration-info(v-if="file_info")
-    | {{ t('download_expiry', {
-    |   count: file_info.max_downloads - file_info.downloads,
-    |   time: human_readable_expiration
-    | }) }}
 
   .error-frame(v-if="large_file") {{ t('download_large_file_warn') }}
 
   form(v-if="status == 'form'" @submit.prevent="submit")
+    .expiration-info(v-if="file_info")
+      | {{ t('download_expiry', {
+      |   count: file_info.max_downloads - file_info.downloads,
+      |   time: human_readable_expiration
+      | }) }}
     span(v-if="has_password")
       label {{ t('app_password') }}:
       TextBox(
