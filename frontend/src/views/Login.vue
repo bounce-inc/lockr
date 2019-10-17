@@ -28,6 +28,7 @@ import Button from '../components/Button'
 import Spinner from '../components/Spinner'
 import TextBox from '../components/TextBox'
 import api from '../api'
+import account from '../account'
 import { show_error } from '../error'
 import { t } from '../i18n'
 import { sign_with_password } from '../password'
@@ -67,6 +68,7 @@ export default
         return
       finally
         @busy = false
+      account.get()
       @$router.push @url
 </script>
 

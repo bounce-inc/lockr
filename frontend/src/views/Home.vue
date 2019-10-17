@@ -18,7 +18,6 @@ import Button from '../components/Button'
 import Description from '../components/Description'
 import FileChooser from '../components/FileChooser'
 import FolderIcon from 'vue-material-design-icons/Folder'
-import api from '../api'
 import i18n, { t } from '../i18n'
 import { show_error } from '../error'
 import { is_mobile } from '../util'
@@ -49,10 +48,6 @@ export default
 
   mounted: ->
     @canon_path()
-    try
-      api 'GET', '/status'
-    catch e
-      show_error e
 
   watch:
     lang: -> @canon_path()

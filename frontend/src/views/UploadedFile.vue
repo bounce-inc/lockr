@@ -200,7 +200,7 @@ export default
   beforeDestroy: ->
     clearInterval @timer
     @exitting = true
-    @ws.close()
+    @ws?.close()
 </script>
 
 <style scoped lang="stylus">

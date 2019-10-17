@@ -4,6 +4,7 @@
   @touchstart="has_mouse = false"
 )
   header
+    .account(v-if="username") {{ username }}
     h1
       router-link(to="/")
         LockIcon
@@ -25,7 +26,7 @@ import CookieNotice from './components/CookieNotice'
 import ErrorModal from './components/ErrorModal'
 import Footer from './components/Footer'
 import LockIcon from 'vue-material-design-icons/Lock'
-import api from './api'
+import account from './account'
 import i18n from './i18n'
 import { error_status, show_error } from './error'
 
@@ -42,11 +43,11 @@ export default
     i18n: i18n
     error_status: error_status
     notice_shown: false
-  created: ->
-    try
-      await api 'GET', '/status'
-    catch e
-      show_error e
+    account: account
+  computed:
+    username: ->
+      user = @account.user
+      user?.email? and user.email.split('@')[0]
 </script>
 
 <style lang="stylus">
@@ -89,6 +90,11 @@ a
 
   header
     margin 1.6rem 0
+    .account
+      float right
+      font-size 1.2rem
+      line-height 3.2rem
+      opacity 0.7
     h1
       display inline-block
       font-family 'Helvetica Neue', Helvetica, Arial, sans-serif
@@ -100,6 +106,10 @@ a
     .catch
       display inline-block
       margin-left 0.8rem
+    &::after
+      content ''
+      display block
+      clear both
 
   .filler
     flex-grow 1
