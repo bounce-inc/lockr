@@ -85,13 +85,20 @@ import FileList from '../components/FileList'
 import LinkIcon from 'vue-material-design-icons/Link'
 import ProgressIcon from 'vue-material-design-icons/ProgressDownload'
 import QuestionIcon from 'vue-material-design-icons/FileQuestion'
+import QueuedWebSocket from '../ws-queue'
 import Spinner from '../components/Spinner'
-import api, { set_api_host, get_ws_prefix } from '../api'
+import api, {
+  ConnectionError
+  get_ws_prefix
+  reset_api_host
+  set_api_host
+} from '../api'
 import clipboard_copy from 'clipboard-copy'
 import i18n, { t } from '../i18n'
 import metadata from '../metadata'
 import { human_readable_time } from '../ui-util'
 import { show_error } from '../error'
+import { sleep } from '../util'
 
 export default
   components: {
@@ -127,6 +134,7 @@ export default
     ws: null
     expires_at: null
     remaining_time: null
+    exitting: false
 
   computed:
     url: ->
@@ -136,25 +144,40 @@ export default
   methods:
     t: t
 
-    get_file_info: ->
+    get_meta: ->
       meta = metadata.get @id
       if meta
         @meta = { meta..., lastModified: meta.last_modified }
 
-      try
-        res = await api 'POST', "/watches/#{@id}"
-      catch e
-        show_error e, => @$router.push '/'
-        return
+    connect: ->
+      until @exitting
+        reset_api_host()
+        try
+          res = await api 'POST', "/watches/#{@id}"
+        catch e
+          if e instanceof ConnectionError
+            continue
+          show_error e, => @$router.push '/'
+          return
 
-      @info = res.status
+        @info = res.status
 
-      set_api_host res.host
-      @ws = new WebSocket "#{get_ws_prefix()}/watch"
-      @ws.onmessage = (ev) => @info = JSON.parse ev.data
-      @ws.onclose = => show_error new Error 'wsclose' unless @exitting
-      @ws.onerror = => show_error new Error 'websocket'
-      @ws.onopen = => @ws.send res.token
+        try
+          set_api_host res.host
+          @ws = new QueuedWebSocket
+          await @ws.open "#{get_ws_prefix()}/watch"
+          @ws.write res.token
+          loop
+            @info = JSON.parse await @ws.read()
+        catch e
+          if e.message not in ['websocket', 'wsclose']
+            show_error e
+            return
+
+        await api 'DELETE', "/watches/#{res.id}", json:
+          token: res.token
+
+        await sleep 2000
 
     remove: ->
       return unless confirm t 'uploadedfile_confirm_delete'
@@ -194,7 +217,8 @@ export default
       @update_time()
 
   created: ->
-    @get_file_info()
+    @get_meta()
+    @connect()
     @timer = setInterval @update_time, 1000
 
   beforeDestroy: ->

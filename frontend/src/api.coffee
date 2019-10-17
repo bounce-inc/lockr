@@ -40,7 +40,7 @@ export default (method, url, options={}) ->
       if ++tries < max_tries
         await sleep()
         continue
-      throw e
+      throw new ConnectionError()
 
     data =
       if res.headers.get('Content-Type') == 'application/json'
