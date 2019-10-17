@@ -11,13 +11,13 @@ notify() {
     fi
 }
 
+git fetch
+git reset --hard origin/${1:-master}
+
 REF=$(git rev-parse --abbrev-ref HEAD)
 REV=$(git rev-parse --short HEAD)
 
-trap "notify \"DEPLOY $REV ($REF) FAILED\"" ERR
-
-git fetch
-git reset --hard origin/${1:-master}
+trap "notify \"FAILED TO DEPLOY $REV ($REF)\"" ERR
 
 rm -rf build.old
 if [ -d build ]; then
@@ -64,4 +64,4 @@ if [ "$2" != "skip" ]; then
 fi
 echo Done
 
-notify "Deploy $REV ($REF) succeeded"
+notify "Deployed $REV ($REF)"
