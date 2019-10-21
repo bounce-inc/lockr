@@ -3,7 +3,7 @@
 cd $(dirname $0)
 
 notify() {
-    local url=slack-webhook-url
+    local url=../slack-webhook-url
     local text="$1"
     if [ -f $url ]; then
         curl -s -X POST -H 'Content-type: application/json' \
