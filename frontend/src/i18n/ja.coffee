@@ -129,6 +129,7 @@ export default
   error_websocket_detail: 'WebSocketの接続にエラーが発生しました。'
   error_wsclose_title: 'ネットワークエラー'
   error_wsclose_detail: 'コネクションが切断されました。'
+  error_dir_read_title: 'お使いのブラウザではフォルダーをアップロードすることができません'
   error_fileread_title: 'ファイルが読めません'
   error_zip_file_too_large_title: 'ファイルがZIPにできません'
   error_zip_file_too_large_detail: '4GB以上のファイルはZIPに含めることが' +

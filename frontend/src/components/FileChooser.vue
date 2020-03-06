@@ -104,7 +104,10 @@ export default
       ev.preventDefault()
       files = ev.dataTransfer.files # Save files before await
       files = (await scan_entries ev.dataTransfer.items) or files
-      return unless files?.length
+      unless files?.length
+        unless ev.dataTransfer.items
+          show_error new Error 'dir_read'
+        return
       @fileChosen files
     fileChosen: (files) ->
       for file in files

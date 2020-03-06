@@ -131,6 +131,7 @@ export default
   error_websocket_detail: 'WebSocket connection error.'
   error_wsclose_title: 'Network error'
   error_wsclose_detail: 'Connection closed.'
+  error_dir_read_title: 'Your browser is incapable to upload folders'
   error_fileread_title: 'File is not readable'
   error_zip_file_too_large_title: 'File is too large to zip'
   error_zip_file_too_large_detail: '''Files over 4GB cannnot be included in a
