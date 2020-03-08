@@ -55,7 +55,7 @@ html
   font-size 62.5% // 1rem == 10px for default setting (16px) of most browsers
   font-family 'Trebuchet MS', Helvetica, Arial, sans-serif
   background #333
-  color #eee
+  color #fff
   line-height 1.5
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale

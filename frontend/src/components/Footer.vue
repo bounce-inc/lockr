@@ -50,7 +50,7 @@ footer
 
   .copyright
     span.copy &copy; 
-    | {{ year }} 
+    | 2019-{{ year }} 
     a(href="https://www.bounce-inc.jp/" target="_blank" rel="noopener")
       | {{ i18n.t('app_copyright') }}
 </template>

@@ -14,9 +14,11 @@ Lockr encrypts the file in the sender's browser with AES-256 before sending it t
 
 Data encrypted on the client side is encrypted again on the server side with AES-256. The encryption key is generated for each upload and discarded when the file is deleted. For this reason, once a file is deleted, the original data cannot be retrieved even if the deleted file can be restored.
 
-## 5GB for free
+## ~~5GB~~ 50GB for free
 
-Storage capacity up to 5GB per user can be used free of charge.
+~~Storage capacity up to 5GB per user can be used free of charge.~~
+
+To support teleworking, up to 50GB per user is provided for free of charge for a limited time.
  
 ## Broad browser support
 
