@@ -133,9 +133,12 @@ export default
   error_wsclose_detail: 'Connection closed.'
   error_dir_read_title: 'Your browser is incapable to upload folders'
   error_fileread_title: 'File is not readable'
-  error_zip_file_too_large_title: 'File is too large to zip'
+  error_zip_file_too_large_title: 'File is too large'
   error_zip_file_too_large_detail: '''Files over 4GB cannnot be included in a
     ZIP file. Send it separately.'''
+  error_zip_too_large_title: 'Total size of the files is too large'
+  error_zip_too_large_detail:
+    "Can't create a ZIP file larger than 4GB."
   error_upload_too_many_title: 'Too many files'
   error_upload_too_many_detail: 'You can upload up to 100 files at once.'
   error_login_title: 'Login failed'

@@ -128,6 +128,8 @@ export default class Zip
   constructor: (files) ->
     @files = (new Entry(file) for file in files)
     @queue = new Queue
+    if @length() >= 4 * 1024 * 1024 * 1024
+      throw new Error 'zip_too_large'
 
   length: ->
     len = 22 # eocd

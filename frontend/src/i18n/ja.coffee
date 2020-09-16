@@ -127,13 +127,17 @@ export default
     'ファイルが転送中に書き換えられたか、破損した可能性があります。'
   error_websocket_title: 'WebSocketエラー'
   error_websocket_detail: 'WebSocketの接続にエラーが発生しました。'
-  error_wsclose_title: 'ネットワークエラー'
-  error_wsclose_detail: 'コネクションが切断されました。'
+  error_wsclose_title: 'WebSocketエラー'
+  error_wsclose_detail: 'WebSocketコネクションが切断されました。'
   error_dir_read_title: 'お使いのブラウザではフォルダーをアップロードすることができません'
   error_fileread_title: 'ファイルが読めません'
-  error_zip_file_too_large_title: 'ファイルがZIPにできません'
-  error_zip_file_too_large_detail: '4GB以上のファイルはZIPに含めることが' +
+  error_zip_file_too_large_title: 'ファイルが大きすぎます'
+  error_zip_file_too_large_detail: '4GB以上のファイルはZIPにまとめることが' +
     'できません。単独で送信してください。'
+  error_zip_too_large_title: 'ファイルの合計が大きすぎます'
+  error_zip_too_large_detail:
+    'ファイルの合計が4GBを超える場合ZIPにまとめることができません。' +
+    '何回かに分けて送信してください。'
   error_upload_too_many_title: 'ファイルが多すぎます'
   error_upload_too_many_detail:
       '一度にアップロードできるのは100ファイルまでです。'
