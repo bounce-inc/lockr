@@ -37,7 +37,7 @@
     "stylus-loader": "^3.0.2",
     "vue-cli-plugin-coffeescript": "^0.0.3",
     "vue-cli-plugin-markdown": "^0.1.2",
-    "vue-cli-plugin-pug": "^1.0.7",
+    "vue-cli-plugin-pug": "~2.0.0",
     "vue-template-compiler": "^2.6.10",
     "worker-loader": "^2.0.0"
   },
