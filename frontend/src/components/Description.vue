@@ -18,7 +18,6 @@ export default
 
 <style lang="stylus">
 .description
-  margin-top 3.2rem
   h2
     margin-top 2.0rem
     line-height 3.2rem

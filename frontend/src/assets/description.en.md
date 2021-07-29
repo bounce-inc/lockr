@@ -1,5 +1,3 @@
-Lockr is a file transfer service that achieves high security, yet with simple operations.
-<br>
 You no longer need to encrypt your file before sending it.
 
 ## End-to-end encryption (E2EE)

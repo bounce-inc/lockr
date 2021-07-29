@@ -38,6 +38,8 @@ export default
   home_choose:
     'ファイルの送信はとても簡単です。<br>送信するファイルを選択してください。'
   home_btn_choose_file: 'ファイルを選択'
+  home_description: 'Lockr は高度なセキュリティをシンプルな操作で実現したファイル転送サービスです。'
+  home_learn_more: 'もっと見る'
 
   file_chooser_drop_it: 'ドロップしてアップロード'
   file_chooser_drop_them: 'ドロップしてアップロード'

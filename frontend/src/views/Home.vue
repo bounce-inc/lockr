@@ -9,7 +9,13 @@
             FolderIcon
             | 
             | {{ t('home_btn_choose_file') }}
-  Description
+  p.short-description
+    | {{ t('home_description') }}
+    | 
+    a(href="javascript:;" @click="show_description = true" v-if="!show_description")
+      | {{ t('home_learn_more') }}
+
+  Description(v-show="show_description")
 </template>
 
 <script lang="coffee">
@@ -30,6 +36,9 @@ export default
     FileChooser
     FolderIcon
   }
+
+  data: ->
+    show_description: false
 
   computed:
     lang: -> i18n.lang
@@ -64,6 +73,10 @@ export default
 .btn-bar
   margin-top 0.8rem
   text-align right
+
+.short-description
+  margin-top 3.2rem
+  margin-bottom -1.0rem
 
 @media (max-width 640px)
   .chooser-box

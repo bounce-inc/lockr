@@ -39,6 +39,9 @@ export default
     'Sending files is so easy.<br>Just drop here or choose files.<br>'
   home_choose: 'Sending files is so easy.<br>Just choose files.'
   home_btn_choose_file: 'Choose Files'
+  home_description: '''Lockr is a file transfer service that achieves high
+    security, yet with simple operations.'''
+  home_learn_more: 'Learn more'
 
   file_chooser_drop_it: 'Drop it to upload'
   file_chooser_drop_them: 'Drop them to upload'
