@@ -113,7 +113,8 @@ export default class Upload
     if size != @total_size
       throw new Error 'File size changed while uploading'
 
-    ws.write new Uint8Array 0
+    for i in [0...10]
+      ws.write new Uint8Array 0
 
     loop
       data = await ws.read()
